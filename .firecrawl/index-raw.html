@@ -1,0 +1,99 @@
+<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><style rel="stylesheet" type="text/css">@charset "utf-8";
+
+.cocosVideo:-webkit-full-screen { transform: matrix(1, 0, 0, 1, 0, 0) !important; }</style>
+  
+
+  <title>造梦西游Online</title>
+
+  <!--http://www.html5rocks.com/en/mobile/mobifying/-->
+  <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1, minimum-scale=1,maximum-scale=1">
+
+  <!--https://developer.apple.com/library/safari/documentation/AppleApplications/Reference/SafariHTMLRef/Articles/MetaTags.html-->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="format-detection" content="telephone=no">
+
+  <!-- force webkit on 360 -->
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <!-- force edge on IE -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="msapplication-tap-highlight" content="no">
+
+  <!-- force full screen on some browser -->
+  
+  <meta name="full-screen" content="yes">
+  <meta name="x5-fullscreen" content="true">
+  <meta name="360-fullscreen" content="true">
+  
+  <!-- force screen orientation on some browser -->
+  <meta name="screen-orientation" content="landscape">
+  <meta name="x5-orientation" content="landscape">
+
+  <!--fix fireball/issues/3568 -->
+  <!--<meta name="browsermode" content="application">-->
+  <meta name="x5-page-mode" content="app">
+
+  <!--<link rel="apple-touch-icon" href=".png" />-->
+  <!--<link rel="apple-touch-icon-precomposed" href=".png" />-->
+
+  <link rel="stylesheet" type="text/css" href="https://client-zmxyol.3304399.net/client/style-mobile.b5d6c.css">
+  <link rel="icon" href="https://client-zmxyol.3304399.net/client/favicon.8de18.ico">
+</head>
+<body>
+  <canvas id="GameCanvas" tabindex="0"></canvas>
+  <div id="splash" style="display: block;">
+    <div class="progress-bar stripes">
+      <span style="width: 0%"></span>
+    </div>
+  </div>
+  
+<script src="https://cdn.h5wan.4399sj.com/h5web-frame/dist/static/js/api.js?v=2.0" charset="utf-8"></script>
+<script src="https://client-zmxyol.3304399.net/fnsdk.min.js" charset="utf-8"></script>
+<script src="https://client-zmxyol.3304399.net/client/src/settings.2bf7a.js" charset="utf-8"></script>
+&lt;%=webDebugger%&gt;
+<script src="https://client-zmxyol.3304399.net/client/main.df292.js" charset="utf-8"></script>
+
+<script type="text/javascript">
+(function () {
+    // open web debugger console
+    if (typeof VConsole !== 'undefined') {
+        window.vConsole = new VConsole();
+    }
+
+    var debug = window._CCSettings.debug;
+    var splash = document.getElementById('splash');
+    splash.style.display = 'block';
+
+    function loadScript (moduleName, cb) {
+      function scriptLoaded () {
+          document.body.removeChild(domScript);
+          domScript.removeEventListener('load', scriptLoaded, false);
+          cb && cb();
+      };
+      var domScript = document.createElement('script');
+      domScript.async = true;
+      domScript.src = moduleName;
+      domScript.addEventListener('load', scriptLoaded, false);
+      document.body.appendChild(domScript);
+    }
+
+	try{
+		window.electron = require('electron');
+	} catch(error) {
+		
+	}
+
+    loadScript(debug ? 'cocos2d-js.js' : 'cocos2d-js-min.d9aa4.js', function () {
+      if (CC_PHYSICS_BUILTIN || CC_PHYSICS_CANNON) {
+        loadScript(debug ? 'physics.js' : 'physics-min.7f489.js', window.boot);
+      }
+      else {
+        window.boot();
+      }
+    });
+})();
+</script>
+
+
+<script crossorigin="anonymous" src="https://client-zmxyol.3304399.net/client/src/assets/script/config/sacredTowerItem.26b7d.js"></script><script crossorigin="anonymous" src="https://client-zmxyol.3304399.net/client/src/assets/script/config/sacredTowerRewardLevel.b61f5.js"></script><script crossorigin="anonymous" src="https://client-zmxyol.3304399.net/client/src/assets/script/config/sacredTowerRoom.3f1cf.js"></script><script crossorigin="anonymous" src="https://client-zmxyol.3304399.net/client/src/assets/script/config/sacredTowerRoomMonster.db62d.js"></script><script crossorigin="anonymous" src="https://client-zmxyol.3304399.net/client/src/assets/script/config/sacredTowerRoomRanPool.eb80f.js"></script><script crossorigin="anonymous" src="https://client-zmxyol.3304399.net/client/src/assets/script/config/sacredTowerSkill.86ad9.js"></script><script crossorigin="anonymous" src="https://client-zmxyol.3304399.net/client/src/assets/script/config/sacredTowerSkillLv.015b6.js"></script><script crossorigin="anonymous" src="https://client-zmxyol.3304399.net/client/src/assets/script/config/seaLevel.ed450.js"></script><script crossorigin="anonymous" src="https://client-zmxyol.3304399.net/client/src/assets/script/config/secondPassword.c2684.js"></script><script crossorigin="anonymous" src="https://client-zmxyol.3304399.net/client/src/assets/script/config/servant.5e1aa.js"></script><script crossorigin="anonymous" src="https://client-zmxyol.3304399.net/client/src/assets/script/config/setting.586de.js"></script><script crossorigin="anonymous" src="https://client-zmxyol.3304399.net/client/src/assets/script/config/sevenDay.effff.js"></script><script crossorigin="anonymous" src="https://client-zmxyol.3304399.net/client/src/assets/script/config/shop.19bf4.js"></script><script crossorigin="anonymous" src="https://client-zmxyol.3304399.net/client/src/assets/script/config/shopName.eee01.js"></script><script crossorigin="anonymous" src="https://client-zmxyol.3304399.net/client/src/assets/script/config/shopStructure.2ccb9.js"></script><script crossorigin="anonymous" src="https://client-zmxyol.3304399.net/client/src/assets/script/config/skill.1df18.js"></script><script crossorigin="anonymous" src="https://client-zmxyol.3304399.net/client/src/assets/script/config/skillAwaken.54633.js"></script><script crossorigin="anonymous" src="https://client-zmxyol.3304399.net/client/src/assets/script/config/skillExtra.95cc0.js"></script><script crossorigin="anonymous" src="https://client-zmxyol.3304399.net/client/src/assets/script/config/skillExtraLevel.ce2a5.js"></script><script crossorigin="anonymous" src="https://client-zmxyol.3304399.net/client/src/assets/script/config/skillFix.4e197.js"></script><script crossorigin="anonymous" src="https://client-zmxyol.3304399.net/client/src/assets/script/config/skillLevel.6f365.js"></script><script crossorigin="anonymous" src="https://client-zmxyol.3304399.net/client/src/assets/script/config/skillRange.c7fa5.js"></script><script crossorigin="anonymous" src="https://client-zmxyol.3304399.net/client/src/assets/script/config/skillText.9609f.js"></script><script crossorigin="anonymous" src="https://client-zmxyol.3304399.net/client/src/assets/script/config/skyMelee.52bb3.js"></script><script crossorigin="anonymous" src="https://client-zmxyol.3304399.net/client/src/assets/script/config/skyWar.3f2a0.js"></script><script crossorigin="anonymous" src="https://client-zmxyol.3304399.net/client/src/assets/script/config/skyWarAttribute.a57c8.js"></script><script crossorigin="anonymous" src="https://client-zmxyol.3304399.net/client/src/assets/script/config/smallPackage.1833b.js"></script><script crossorigin="anonymous" src="https://client-zmxyol.3304399.net/client/src/assets/script/config/solarTerms.aeb91.js"></script><script crossorigin="anonymous" src="https://client-zmxyol.3304399.net/client/src/assets/script/config/sound.e63b5.js"></script><script crossorigin="anonymous" src="https://client-zmxyol.3304399.net/client/src/assets/script/config/stage.1fb6d.js"></script><script crossorigin="anonymous" src="https://client-zmxyol.3304399.net/client/src/assets/script/config/stageActivity.e5965.js"></script><script crossorigin="anonymous" src="https://client-zmxyol.3304399.net/client/src/assets/script/config/stageBuff.ea1a7.js"></script><script crossorigin="anonymous" src="https://client-zmxyol.3304399.net/client/src/assets/script/config/stageLabel.cdb40.js"></script><script crossorigin="anonymous" src="https://client-zmxyol.3304399.net/client/src/assets/script/config/stageObject.695da.js"></script><script crossorigin="anonymous" src="https://client-zmxyol.3304399.net/client/src/assets/script/config/stageType.56250.js"></script><script crossorigin="anonymous" src="https://client-zmxyol.3304399.net/client/src/assets/script/config/starCore.f5a8c.js"></script><script crossorigin="anonymous" src="https://client-zmxyol.3304399.net/client/src/assets/script/config/starHavoc.841b6.js"></script><script crossorigin="anonymous" src="https://client-zmxyol.3304399.net/client/src/assets/script/config/starHavocDialog.6439a.js"></script><script crossorigin="anonymous" src="https://client-zmxyol.3304399.net/client/src/assets/script/config/starHavocEvent.ff452.js"></script><script crossorigin="anonymous" src="https://client-zmxyol.3304399.net/client/src/assets/script/config/starHavocEventNumber.5e163.js"></script><script crossorigin="anonymous" src="https://client-zmxyol.3304399.net/client/src/assets/script/config/starHavocEventRandom.1428b.js"></script><script crossorigin="anonymous" src="https://client-zmxyol.3304399.net/client/src/assets/script/config/starHavocEventReward.b9757.js"></script><script crossorigin="anonymous" src="https://client-zmxyol.3304399.net/client/src/assets/script/config/starHavocMonsterAttribute.da463.js"></script><script crossorigin="anonymous" src="https://client-zmxyol.3304399.net/client/src/assets/script/config/starHavocPond.1f886.js"></script><script crossorigin="anonymous" src="https://client-zmxyol.3304399.net/client/src/assets/script/config/starHavocRoute.043ed.js"></script><script crossorigin="anonymous" src="https://client-zmxyol.3304399.net/client/src/assets/script/config/starMap.8970f.js"></script><script crossorigin="anonymous" src="https://client-zmxyol.3304399.net/client/src/assets/script/config/starStone.7129d.js"></script><script crossorigin="anonymous" src="https://client-zmxyol.3304399.net/client/src/assets/script/config/starStoneAffix.8c092.js"></script><script crossorigin="anonymous" src="https://client-zmxyol.3304399.net/client/src/assets/script/config/stone.f425d.js"></script><script crossorigin="anonymous" src="https://client-zmxyol.3304399.net/client/src/assets/script/config/story.301ee.js"></script><script crossorigin="anonymous" src="https://client-zmxyol.3304399.net/client/src/assets/script/config/storyBehavior.014d9.js"></script><script crossorigin="anonymous" src="https://client-zmxyol.3304399.net/client/src/assets/script/config/stronger.200f2.js"></script><script crossorigin="anonymous" src="https://client-zmxyol.3304399.net/client/src/assets/script/config/surpriseBox.a6663.js"></script><script crossorigin="anonymous" src="https://client-zmxyol.3304399.net/client/src/assets/script/config/surpriseDrop.d57c7.js"></script><script crossorigin="anonymous" src="https://client-zmxyol.3304399.net/client/src/assets/script/config/surprisePool.73412.js"></script><script crossorigin="anonymous" src="https://client-zmxyol.3304399.net/client/src/assets/script/config/sysUnlock.57b3a.js"></script><script crossorigin="anonymous" src="https://client-zmxyol.3304399.net/client/src/assets/script/config/systemBulletin.853ce.js"></script><script crossorigin="anonymous" src="https://client-zmxyol.3304399.net/client/src/assets/script/config/systemIcon.1dc6e.js"></script><script crossorigin="anonymous" src="https://client-zmxyol.3304399.net/client/src/assets/script/config/task.4708f.js"></script><script crossorigin="anonymous" src="https://client-zmxyol.3304399.net/client/src/assets/script/config/taskMoney.0c778.js"></script><script crossorigin="anonymous" src="https://client-zmxyol.3304399.net/client/src/assets/script/config/taskMoneyReward.4b010.js"></script><script crossorigin="anonymous" src="https://client-zmxyol.3304399.net/client/src/assets/script/config/tenjinArena.2def2.js"></script><script crossorigin="anonymous" src="https://client-zmxyol.3304399.net/client/src/assets/script/config/tenjinArenaData.9505b.js"></script><script crossorigin="anonymous" src="https://client-zmxyol.3304399.net/client/src/assets/script/config/ticketbuyservice.b589f.js"></script><script crossorigin="anonymous" src="https://client-zmxyol.3304399.net/client/src/assets/script/config/timeFountain.e9daa.js"></script><script crossorigin="anonymous" src="https://client-zmxyol.3304399.net/client/src/assets/script/config/title.6ab81.js"></script><script crossorigin="anonymous" src="https://client-zmxyol.3304399.net/client/src/assets/script/config/titleAttribute.80690.js"></script><script crossorigin="anonymous" src="https://client-zmxyol.3304399.net/client/src/assets/script/config/town.9aad0.js"></script><script crossorigin="anonymous" src="https://client-zmxyol.3304399.net/client/src/assets/script/config/townNPC.f4ee6.js"></script><script crossorigin="anonymous" src="https://client-zmxyol.3304399.net/client/src/assets/script/config/valueFlag.28fe6.js"></script><script crossorigin="anonymous" src="https://client-zmxyol.3304399.net/client/src/assets/script/config/valueFlagSkill.1e80a.js"></script><script crossorigin="anonymous" src="https://client-zmxyol.3304399.net/client/src/assets/script/config/valueFlagSkillSelf.764af.js"></script><script crossorigin="anonymous" src="https://client-zmxyol.3304399.net/client/src/assets/script/config/viewZoom.b0e68.js"></script><script crossorigin="anonymous" src="https://client-zmxyol.3304399.net/client/src/assets/script/config/viewZoomLow.2a15d.js"></script><script crossorigin="anonymous" src="https://client-zmxyol.3304399.net/client/src/assets/script/config/vip.a7b4e.js"></script><script crossorigin="anonymous" src="https://client-zmxyol.3304399.net/client/src/assets/script/config/wealCard.bb0fc.js"></script><script crossorigin="anonymous" src="https://client-zmxyol.3304399.net/client/src/assets/script/config/wearEquip.15506.js"></script><script crossorigin="anonymous" src="https://client-zmxyol.3304399.net/client/src/assets/script/config/wing.931d0.js"></script><script crossorigin="anonymous" src="https://client-zmxyol.3304399.net/client/src/assets/script/config/wingAttribute.fd184.js"></script><script crossorigin="anonymous" src="https://client-zmxyol.3304399.net/client/src/assets/script/config/wingSkill.415d6.js"></script><script crossorigin="anonymous" src="https://client-zmxyol.3304399.net/client/src/assets/script/config/worldEvents.16df2.js"></script><script crossorigin="anonymous" src="https://client-zmxyol.3304399.net/client/src/assets/script/config/worldEventsList.e2a7e.js"></script><script crossorigin="anonymous" src="https://client-zmxyol.3304399.net/client/src/assets/script/config/xianpo.eb364.js"></script><script crossorigin="anonymous" src="https://client-zmxyol.3304399.net/client/src/assets/script/extend/es6Ex.00783.js"></script><script crossorigin="anonymous" src="https://client-zmxyol.3304399.net/client/src/assets/script/lib/zlib.min.6cc5f.js"></script><script crossorigin="anonymous" src="https://client-zmxyol.3304399.net/client/assets/resources/index.9c55e.js"></script><script crossorigin="anonymous" src="https://client-zmxyol.3304399.net/client/assets/internal/index.4af9d.js"></script></body></html>
