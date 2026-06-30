@@ -205,6 +205,7 @@ function main() {
       const rideId = parseInt(rideIdStr);
       const rideInfo = rideById[rideId];
       if (!rideInfo) continue;
+      if (rides.some((r) => r.name === rideInfo.name)) continue;
 
       const statsByLevel = {};
       for (const fight of godWarFight) {
