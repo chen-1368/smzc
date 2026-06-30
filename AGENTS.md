@@ -10,7 +10,7 @@
 
 - **爬取配置**：`node scripts/01-crawl.js` — 下载 11 个配置文件到 `godWar-configs/`
 - **提取数据**：`node scripts/02-extract.js` — 解析配置 → 输出 `data/godwar.json`
-- **Web 开发服务器**：`cd web && npm run dev` — Vite + React 本地启动
+- **Web 开发服务器**：`npm run dev` — Vite + React 本地启动
 - **Web 构建**：`cd web && npm install && npm run build`
 - 未配置测试或代码检查工具。
 

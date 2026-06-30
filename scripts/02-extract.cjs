@@ -9,21 +9,16 @@ const path = require("path");
 const acorn = require("acorn");
 
 const CONFIG_DIR = path.resolve(__dirname, "..", "godWar-configs");
-const OUTPUT_FILE = path.resolve(
-  __dirname,
-  "..",
-  "web",
-  "src",
-  "data",
-  "godwar.json",
-);
+const OUTPUT_FILE = path.resolve(__dirname, "..", "src", "data", "godwar.json");
 
 function evalNode(node) {
   switch (node.type) {
     case "Literal":
       return node.value;
     case "ArrayExpression":
-      return node.elements.map((el) => (el === null ? undefined : evalNode(el)));
+      return node.elements.map((el) =>
+        el === null ? undefined : evalNode(el),
+      );
     case "ObjectExpression":
       const obj = {};
       for (const prop of node.properties) {
