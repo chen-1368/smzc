@@ -1,0 +1,110 @@
+import { useState, useMemo } from 'react'
+import { STAT_ORDER, calcStat, fmtStat, getStarMult } from './statUtils'
+
+export default function RideTab({ data }) {
+  const { rides, battlefields } = data
+  const [bfLevel, setBfLevel] = useState(220)
+  const [star, setStar] = useState(8)
+  const [sortKey, setSortKey] = useState(null)
+  const [sortAsc, setSortAsc] = useState(false)
+  const [search, setSearch] = useState('')
+
+  const handleSort = (key) => {
+    if (sortKey === key) {
+      setSortAsc(!sortAsc)
+    } else {
+      setSortKey(key)
+      setSortAsc(false)
+    }
+  }
+
+  const filtered = useMemo(() => {
+    let list = search ? rides.filter(r => r.name.includes(search)) : rides
+    if (!sortKey) return list
+    return [...list].sort((a, b) => {
+      const va = calcStat(a.stats?.[bfLevel]?.[sortKey], sortKey, 0) ?? -1
+      const vb = calcStat(b.stats?.[bfLevel]?.[sortKey], sortKey, 0) ?? -1
+      return sortAsc ? va - vb : vb - va
+    })
+  }, [rides, bfLevel, sortKey, sortAsc, search])
+
+  return (
+    <div>
+      <div className="flex flex-wrap gap-4 mb-4 items-end">
+        <div>
+          <label className="block text-xs text-slate-400 mb-1">战场等阶</label>
+          <select value={bfLevel} onChange={e => setBfLevel(Number(e.target.value))}>
+            {[...battlefields].reverse().map(b => (
+              <option key={b.level} value={b.level}>{b.name} (Lv.{b.level})</option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <label className="block text-xs text-slate-400 mb-1">星级</label>
+          <select value={star} onChange={e => setStar(Number(e.target.value))}>
+            {Array.from({ length: 9 }, (_, i) => (
+              <option key={i} value={i}>{i}星 (×{getStarMult(i).toFixed(2)})</option>
+            )).reverse()}
+          </select>
+        </div>
+        <div>
+          <label className="block text-xs text-slate-400 mb-1">搜索</label>
+          <input
+            type="text"
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            placeholder="坐骑名..."
+            className="px-3 py-1.5 rounded-lg text-sm bg-slate-800 border border-slate-600 text-slate-200 focus:outline-none focus:border-amber-500"
+          />
+        </div>
+        {sortKey && (
+          <button
+            onClick={() => { setSortKey(null); setSortAsc(false) }}
+            className="text-xs text-slate-400 hover:text-amber-400 px-2 py-1 rounded border border-slate-600"
+          >
+            清除排序
+          </button>
+        )}
+      </div>
+
+      <div className="overflow-x-auto">
+        <table>
+          <thead>
+            <tr>
+              <th className="sticky left-0 bg-slate-900 z-10">坐骑</th>
+              {STAT_ORDER.map(([key, label]) => (
+                <th
+                  key={key}
+                  onClick={() => handleSort(key)}
+                  className={`cursor-pointer select-none hover:text-amber-400 transition-colors ${sortKey === key ? 'text-amber-400' : ''}`}
+                >
+                  {label}
+                  {sortKey === key && <span className="ml-1">{sortAsc ? '↑' : '↓'}</span>}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {filtered.map(ride => (
+              <tr key={ride.id}>
+                <td className="sticky left-0 bg-slate-900 z-10 text-amber-400 font-semibold whitespace-nowrap">
+                  {ride.name}
+                </td>
+                {STAT_ORDER.map(([key]) => {
+                  const base = ride.stats?.[bfLevel]?.[key]
+                  const val = calcStat(base, key, star)
+                  const isBad = base !== undefined && base < 10 && key !== 'spd'
+                  return (
+                    <td key={key} className={`text-sm ${isBad ? 'text-red-400' : ''}`}>
+                      {val !== null ? fmtStat(val) : '-'}
+                    </td>
+                  )
+                })}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  )
+}
