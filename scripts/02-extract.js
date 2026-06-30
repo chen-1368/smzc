@@ -6,6 +6,7 @@
 
 const fs = require("fs");
 const path = require("path");
+const acorn = require("acorn");
 
 const CONFIG_DIR = path.resolve(__dirname, "..", "godWar-configs");
 const OUTPUT_FILE = path.resolve(
@@ -17,13 +18,40 @@ const OUTPUT_FILE = path.resolve(
   "godwar.json",
 );
 
+function evalNode(node) {
+  switch (node.type) {
+    case "Literal":
+      return node.value;
+    case "ArrayExpression":
+      return node.elements.map((el) => (el === null ? undefined : evalNode(el)));
+    case "ObjectExpression":
+      const obj = {};
+      for (const prop of node.properties) {
+        const key =
+          prop.key.type === "Identifier" ? prop.key.name : evalNode(prop.key);
+        obj[key] = evalNode(prop.value);
+      }
+      return obj;
+    case "UnaryExpression":
+      if (node.operator === "-") return -evalNode(node.argument);
+      if (node.operator === "+") return +evalNode(node.argument);
+      if (node.operator === "!") return !evalNode(node.argument);
+      throw new Error(`不支持的运算符: ${node.operator}`);
+    case "Identifier":
+      if (node.name === "undefined") return undefined;
+      throw new Error(`不支持的标识符: ${node.name}`);
+    default:
+      throw new Error(`不支持的节点类型: ${node.type}`);
+  }
+}
+
 function loadConfig(filename) {
   const content = fs.readFileSync(path.join(CONFIG_DIR, filename), "utf8");
-  // Extract the array using eval since JS objects may have unquoted keys
-  const match = content.match(/var tmp=(\[.*\]);/s);
-  if (!match) throw new Error(`无法解析 ${filename}`);
-  // eslint-disable-next-line no-eval
-  return eval("(" + match[1] + ")");
+  const ast = acorn.parse(content, { ecmaVersion: 2020 });
+  const decl = ast.body[0];
+  if (!decl || decl.type !== "VariableDeclaration")
+    throw new Error(`无法解析 ${filename}`);
+  return evalNode(decl.declarations[0].init);
 }
 
 function arrayToObjects(arr) {
