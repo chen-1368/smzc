@@ -8,10 +8,10 @@
 
 ## 常用命令
 
-- **爬取配置**：`node scripts/01-crawl.js` — 下载 11 个配置文件到 `godWar-configs/`
-- **提取数据**：`node scripts/02-extract.js` — 解析配置 → 输出 `data/godwar.json`
+- **爬取配置**：`node scripts/01-crawl.cjs` — 下载 11 个配置文件到 `godWar-configs/`
+- **提取数据**：`node scripts/02-extract.cjs` — 解析配置 → 输出 `data/godwar.json`
 - **Web 开发服务器**：`npm run dev` — Vite + React 本地启动
-- **Web 构建**：`cd web && npm install && npm run build`
+- **Web 构建**：`npm install && npm run build`
 - 未配置测试或代码检查工具。
 
 ## 注意事项
@@ -24,5 +24,5 @@
 ## 仓库规范
 
 - 所有代码、注释和界面文字使用**中文**。
-- 流水线脚本按编号命名（`01-crawl.js`、`02-extract.js`），新增步骤请遵循此模式。
+- 流水线脚本按编号命名（`01-crawl.cjs`、`02-extract.cjs`），新增步骤请遵循此模式。
 - 提交信息使用中文。

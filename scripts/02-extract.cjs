@@ -1,7 +1,7 @@
 /**
  * 数据提取脚本：解析 godWar-configs/ 中的原始 JS 文件，生成结构化 JSON
  *
- * 用法：node scripts/02-extract.js
+ * 用法：node scripts/02-extract.cjs
  */
 
 const fs = require("fs");
