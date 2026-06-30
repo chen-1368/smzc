@@ -104,17 +104,11 @@ async function main() {
   }
   console.log(`匹配到 ${found.length} 个需要的文件`);
 
-  let success = 0, skipped = 0, failed = 0;
+  let success = 0, failed = 0;
 
   for (const [base, hashedName] of Object.entries(needed)) {
     const saveName = stripHash(hashedName);
     const dest = path.join(CONFIG_DIR, saveName);
-
-    if (fs.existsSync(dest) && fs.statSync(dest).size > 200) {
-      console.log(`[跳过] ${saveName} (已存在)`);
-      skipped++;
-      continue;
-    }
 
     const url = CLIENT_ROOT + 'src/assets/script/config/' + hashedName;
     try {
@@ -143,7 +137,7 @@ async function main() {
   }
 
   console.log(`\n--- 完成 ---`);
-  console.log(`下载: ${success}, 跳过: ${skipped}, 失败: ${failed}`);
+  console.log(`下载: ${success}, 失败: ${failed}`);
 }
 
 main().catch(console.error);
