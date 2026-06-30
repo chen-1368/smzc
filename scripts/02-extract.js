@@ -66,17 +66,17 @@ function extractStats(monsterRow, level, attrByLevel) {
 function main() {
   console.log('加载配置文件...');
 
-  const godWarFight = arrayToObjects(loadConfig('godWarFight.742d0.js'));
-  const godWarBoss = arrayToObjects(loadConfig('godWarBoss.f1add.js'));
-  const godWarBossShow = arrayToObjects(loadConfig('godWarBossShow.fe1c4.js'));
-  const godWarCrystal = arrayToObjects(loadConfig('godWarCrystal.2d3d3.js'));
-  const godWarAttribute = arrayToObjects(loadConfig('godWarAttribute.49f70.js'));
-  const godWarSubstitute = arrayToObjects(loadConfig('godWarSubstitute.5fa11.js'));
-  const godWarRoleData = arrayToObjects(loadConfig('godWarRole.d0802.js'));
-  const monsterAttribute = arrayToObjects(loadConfig('monsterAttribute.6d813.js'));
-  const monster = arrayToObjects(loadConfig('monster.ba521.js'));
-  const ride = arrayToObjects(loadConfig('ride.7ef48.js'));
-  const role = arrayToObjects(loadConfig('role.f25f2.js'));
+  const godWarFight = arrayToObjects(loadConfig('godWarFight.js'));
+  const godWarBoss = arrayToObjects(loadConfig('godWarBoss.js'));
+  const godWarBossShow = arrayToObjects(loadConfig('godWarBossShow.js'));
+  const godWarCrystal = arrayToObjects(loadConfig('godWarCrystal.js'));
+  const godWarAttribute = arrayToObjects(loadConfig('godWarAttribute.js'));
+  const godWarSubstitute = arrayToObjects(loadConfig('godWarSubstitute.js'));
+  const godWarRoleData = arrayToObjects(loadConfig('godWarRole.js'));
+  const monsterAttribute = arrayToObjects(loadConfig('monsterAttribute.js'));
+  const monster = arrayToObjects(loadConfig('monster.js'));
+  const ride = arrayToObjects(loadConfig('ride.js'));
+  const role = arrayToObjects(loadConfig('role.js'));
 
   // Build monster lookup by id
   const monsterById = {};

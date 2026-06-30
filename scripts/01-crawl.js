@@ -1,60 +1,48 @@
 /**
- * 爬取脚本：从CDN下载神魔战场相关配置文件
+ * 爬取脚本：从CDN自动发现并下载神魔战场相关配置文件
  *
  * 用法：node scripts/01-crawl.js
  *
- * 从 .firecrawl/settings.js 读取 jsList 获取文件名和哈希，
- * 逐个从 CDN 下载到 godWar-configs/ 目录。
+ * 流程：
+ *   1. 从 CDN 下载 index.html，提取 settings.js URL
+ *   2. 下载 settings.js，解析 jsList 获取全量配置清单
+ *   3. 匹配提取脚本需要的 11 个文件
+ *   4. 下载并去除哈希后缀保存到 godWar-configs/
  */
 
 const https = require('https');
 const fs = require('fs');
 const path = require('path');
 
-const CDN_BASE = 'https://client-zmxyol.3304399.net/client/src/assets/script/config/';
+const CLIENT_ROOT = 'https://client-zmxyol.3304399.net/client/';
 const CONFIG_DIR = path.resolve(__dirname, '..', 'godWar-configs');
-const SETTINGS_FILE = path.resolve(__dirname, '..', '.firecrawl', 'settings.js');
 
-const REQUIRED_FILES = [
-  'godWar.6acdd.js',
-  'godWarStage.ee4c6.js',
-  'godWarFight.742d0.js',
-  'godWarAttribute.49f70.js',
-  'godWarCrystal.2d3d3.js',
-  'godWarRole.d0802.js',
-  'godWarBoss.f1add.js',
-  'godWarBossShow.fe1c4.js',
-  'godWarBossFashion.b0693.js',
-  'godWarBossTalent.d760f.js',
-  'godWarBossTalentGroup.0740d.js',
-  'godWarSubstitute.5fa11.js',
-  'godWarRank.66ab2.js',
-  'godWarReward.2893e.js',
-  'godWarRewardLimit.50bbf.js',
-  'monster.ba521.js',
-  'monsterAttribute.6d813.js',
-  'ride.7ef48.js',
-  'role.f25f2.js',
-  'roleInitial.1c7ab.js',
+const NEEDED = [
+  'godWarFight', 'godWarBoss', 'godWarBossShow', 'godWarCrystal',
+  'godWarAttribute', 'godWarSubstitute', 'godWarRole',
+  'monsterAttribute', 'monster', 'ride', 'role',
 ];
 
-function parseSettings() {
-  const content = fs.readFileSync(SETTINGS_FILE, 'utf8');
-  const files = [];
-  const regex = /assets\/script\/config\/([a-zA-Z]+\.[a-f0-9]+\.js)/g;
-  let m;
-  while ((m = regex.exec(content)) !== null) {
-    files.push(m[1]);
-  }
-  return files;
-}
-
-function download(filename) {
+function fetchText(url) {
   return new Promise((resolve, reject) => {
-    const url = CDN_BASE + filename;
     https.get(url, (res) => {
       if (res.statusCode !== 200) {
-        reject(new Error(`${filename}: HTTP ${res.statusCode}`));
+        reject(new Error(`${url}: HTTP ${res.statusCode}`));
+        return;
+      }
+      const chunks = [];
+      res.on('data', (chunk) => chunks.push(chunk));
+      res.on('end', () => resolve(Buffer.concat(chunks).toString('utf8')));
+      res.on('error', reject);
+    }).on('error', reject);
+  });
+}
+
+function download(url) {
+  return new Promise((resolve, reject) => {
+    https.get(url, (res) => {
+      if (res.statusCode !== 200) {
+        reject(new Error(`${url}: HTTP ${res.statusCode}`));
         return;
       }
       const chunks = [];
@@ -65,50 +53,90 @@ function download(filename) {
   });
 }
 
+async function getSettingsUrl() {
+  console.log('获取 index.html ...');
+  const html = await fetchText(CLIENT_ROOT + 'index.html');
+  const m = html.match(/src\/settings\.[a-f0-9]+\.js/);
+  if (!m) throw new Error('无法在 index.html 中找到 settings.js');
+  const url = CLIENT_ROOT + m[0];
+  console.log(`  settings.js: ${url}`);
+  return url;
+}
+
+async function getFileList(settingsUrl) {
+  console.log('获取 settings.js ...');
+  const text = await fetchText(settingsUrl);
+  const re = /assets\/script\/config\/([a-zA-Z]+\.[a-f0-9]+\.js)/g;
+  const files = [];
+  let m;
+  while ((m = re.exec(text)) !== null) files.push(m[1]);
+  console.log(`  jsList 共 ${files.length} 个配置文件`);
+  return files;
+}
+
+function matchNeeded(allFiles) {
+  const result = {};
+  for (const f of allFiles) {
+    const base = f.replace(/\.[a-f0-9]+\.js$/, '');
+    if (NEEDED.includes(base)) result[base] = f;
+  }
+  return result;
+}
+
+function stripHash(filename) {
+  return filename.replace(/\.[a-f0-9]+\.js$/, '.js');
+}
+
 async function main() {
   if (!fs.existsSync(CONFIG_DIR)) {
     fs.mkdirSync(CONFIG_DIR, { recursive: true });
   }
 
-  const available = parseSettings();
-  console.log(`settings.js 中共 ${available.length} 个配置文件`);
+  const settingsUrl = await getSettingsUrl();
+  const allFiles = await getFileList(settingsUrl);
+  const needed = matchNeeded(allFiles);
+
+  const found = Object.keys(needed);
+  const missing = NEEDED.filter(n => !needed[n]);
+  if (missing.length > 0) {
+    console.error(`[错误] 以下文件在 jsList 中未找到: ${missing.join(', ')}`);
+    process.exit(1);
+  }
+  console.log(`匹配到 ${found.length} 个需要的文件`);
 
   let success = 0, skipped = 0, failed = 0;
 
-  for (const filename of REQUIRED_FILES) {
-    const dest = path.join(CONFIG_DIR, filename);
+  for (const [base, hashedName] of Object.entries(needed)) {
+    const saveName = stripHash(hashedName);
+    const dest = path.join(CONFIG_DIR, saveName);
 
     if (fs.existsSync(dest) && fs.statSync(dest).size > 200) {
-      console.log(`[跳过] ${filename} (已存在)`);
+      console.log(`[跳过] ${saveName} (已存在)`);
       skipped++;
       continue;
     }
 
-    if (!available.includes(filename)) {
-      console.log(`[警告] ${filename} 不在 settings.js 中，尝试直接下载`);
-    }
-
+    const url = CLIENT_ROOT + 'src/assets/script/config/' + hashedName;
     try {
-      console.log(`[下载] ${filename} ...`);
-      const data = await download(filename);
+      console.log(`[下载] ${saveName} (${hashedName}) ...`);
+      const data = await download(url);
       if (data.length < 200) {
         throw new Error(`文件过小 (${data.length} bytes)，可能是404页面`);
       }
       fs.writeFileSync(dest, data);
-      console.log(`[完成] ${filename} (${(data.length / 1024).toFixed(1)} KB)`);
+      console.log(`[完成] ${saveName} (${(data.length / 1024).toFixed(1)} KB)`);
       success++;
     } catch (err) {
-      console.error(`[失败] ${filename}: ${err.message}`);
-      // 重试一次
+      console.error(`[失败] ${saveName}: ${err.message}`);
       try {
         await new Promise(r => setTimeout(r, 1000));
-        const data = await download(filename);
+        const data = await download(url);
         if (data.length < 200) throw new Error('重试仍失败');
         fs.writeFileSync(dest, data);
-        console.log(`[重试成功] ${filename}`);
+        console.log(`[重试成功] ${saveName}`);
         success++;
       } catch (err2) {
-        console.error(`[重试失败] ${filename}: ${err2.message}`);
+        console.error(`[重试失败] ${saveName}: ${err2.message}`);
         failed++;
       }
     }
