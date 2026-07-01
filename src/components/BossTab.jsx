@@ -46,7 +46,7 @@ export default function BossTab({ data }) {
         </div>
 
         <div className="mb-4">
-          <h2 className="text-xl font-bold text-amber-400">{boss?.name} · {['一','二','三','四','五','六'][tier - 1]}阶</h2>
+          <h2 className="text-xl font-bold text-amber-400">{boss?.name}</h2>
           {tierInfo?.desc && (
             <p className="text-sm text-slate-400 mt-2" dangerouslySetInnerHTML={{ __html: tierInfo.desc.replace(/<br\s*\/?>/g, ' ') }} />
           )}
@@ -67,7 +67,7 @@ export default function BossTab({ data }) {
                 {stars.map((s, i) => (
                   <tr key={s.id || i}>
                     <td className="text-amber-400 font-semibold whitespace-nowrap">
-                      {s.remark?.match(/(\d+星[觉醒]*)/)?.[1]?.replace('星','阶') || `${['一','二','三','四','五','六','七'][i] || i+1}阶`}
+                      {`${['一','二','三','四','五','六'][i] || i+1}阶`}
                     </td>
                     {STAT_FIELDS.map(([key]) => (
                       <td key={key} className="text-sm">
