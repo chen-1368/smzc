@@ -19,7 +19,7 @@ function evalNode(node) {
       return node.elements.map((el) =>
         el === null ? undefined : evalNode(el),
       );
-    case "ObjectExpression":
+    case "ObjectExpression": {
       const obj = {};
       for (const prop of node.properties) {
         const key =
@@ -27,6 +27,7 @@ function evalNode(node) {
         obj[key] = evalNode(prop.value);
       }
       return obj;
+    }
     case "UnaryExpression":
       if (node.operator === "-") return -evalNode(node.argument);
       if (node.operator === "+") return +evalNode(node.argument);
@@ -114,11 +115,9 @@ function main() {
   const godWarBossShow = arrayToObjects(loadConfig("godWarBossShow.js"));
   const godWarCrystal = arrayToObjects(loadConfig("godWarCrystal.js"));
   const godWarAttribute = arrayToObjects(loadConfig("godWarAttribute.js"));
-  const godWarSubstitute = arrayToObjects(loadConfig("godWarSubstitute.js"));
   const monsterAttribute = arrayToObjects(loadConfig("monsterAttribute.js"));
   const monster = arrayToObjects(loadConfig("monster.js"));
   const ride = arrayToObjects(loadConfig("ride.js"));
-  const role = arrayToObjects(loadConfig("role.js"));
 
   // Build monster lookup by id
   const monsterById = {};
@@ -196,7 +195,7 @@ function main() {
   const rides = [];
   const firstFight = godWarFight.find((f) => !f.close);
   if (firstFight?.rideMonster) {
-    for (const [rideIdStr, _] of Object.entries(firstFight.rideMonster)) {
+    for (const rideIdStr of Object.keys(firstFight.rideMonster)) {
       const rideId = parseInt(rideIdStr);
       const rideInfo = rideById[rideId];
       if (!rideInfo) continue;
@@ -251,7 +250,7 @@ function main() {
     const seenStarIds = new Set();
     for (const b of group.entries) {
       if (!b.monsterId) continue;
-      for (const [_, showId] of Object.entries(b.monsterId)) {
+      for (const showId of Object.values(b.monsterId)) {
         if (seenStarIds.has(showId)) continue;
         seenStarIds.add(showId);
         const show = bossShowById[showId];

@@ -20,12 +20,11 @@ export default function RoleTab({ data }) {
   const sortedRoles = useMemo(() => {
     if (!sortKey) return roles
     return [...roles].sort((a, b) => {
-      const baseVal = monsterAttrTable[bfLevel]?.[sortKey] || 0
       const va = a.stats?.[bfLevel]?.[sortKey] ?? -1
       const vb = b.stats?.[bfLevel]?.[sortKey] ?? -1
       return sortAsc ? va - vb : vb - va
     })
-  }, [roles, bfLevel, sortKey, sortAsc, monsterAttrTable])
+  }, [roles, bfLevel, sortKey, sortAsc])
 
   return (
     <div>

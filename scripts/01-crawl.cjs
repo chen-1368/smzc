@@ -118,7 +118,7 @@ async function main() {
   let success = 0,
     failed = 0;
 
-  for (const [base, hashedName] of Object.entries(needed)) {
+  for (const hashedName of Object.values(needed)) {
     const saveName = stripHash(hashedName);
     const dest = path.join(CONFIG_DIR, saveName);
 

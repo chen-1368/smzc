@@ -29,12 +29,11 @@ export default function RideTab({ data }) {
     let list = search ? rides.filter(r => r.name.includes(search)) : rides
     if (!sortKey) return list
     return [...list].sort((a, b) => {
-      const baseVal = monsterAttrTable[bfLevel]?.[sortKey] || 0
       const va = a.stats?.[bfLevel]?.[sortKey] ?? -1
       const vb = b.stats?.[bfLevel]?.[sortKey] ?? -1
       return sortAsc ? va - vb : vb - va
     })
-  }, [rides, bfLevel, sortKey, sortAsc, search, monsterAttrTable])
+  }, [rides, bfLevel, sortKey, sortAsc, search])
 
   return (
     <div>

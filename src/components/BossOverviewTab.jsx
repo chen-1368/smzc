@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useCallback } from 'react'
 
 const BOSS_STAT_FIELDS = [
   ['hp', '生命'], ['atk', '攻击'], ['def', '防御'], ['healHp', '回血'],
@@ -24,13 +24,13 @@ export default function BossOverviewTab({ data }) {
     }
   }
 
-  const computeStat = (boss, star, key) => {
+  const computeStat = useCallback((boss, star, key) => {
     if (!base || !star) return null
     if (key === 'spd') return star.spd || 400
     if (key === 'mp' || key === 'healMp') return null
     const starMult = star[key] ?? 1
     return Math.round((base[key] || 0) * starMult)
-  }
+  }, [base])
 
   const sorted = useMemo(() => {
     if (!sortKey) return bosses
@@ -41,7 +41,7 @@ export default function BossOverviewTab({ data }) {
       const vb = computeStat(b, sb, sortKey) ?? -1
       return sortAsc ? va - vb : vb - va
     })
-  }, [bosses, starIdx, sortKey, sortAsc, base])
+  }, [bosses, starIdx, sortKey, sortAsc, computeStat])
 
   const starLabel = (idx) => {
     const cn = ['一', '二', '三', '四', '五', '六']
