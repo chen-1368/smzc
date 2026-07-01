@@ -32,7 +32,6 @@ function SearchInput({ onSearch }) {
         value={value}
         onChange={(e) => setValue(e.target.value)}
         placeholder="坐骑名..."
-        className="px-3 py-1.5 rounded-lg text-sm bg-slate-800 border border-slate-600 text-slate-200 focus:outline-none focus:border-amber-500"
       />
     </form>
   );
@@ -68,9 +67,9 @@ export default function RideTab({ data }) {
   const baseRow = monsterAttrTable[bfLevel] || {};
 
   return (
-    <div>
-      <div className="flex mb-4 items-end justify-between">
-        <div className="flex gap-4 items-end">
+    <div className="animate-fade-in">
+      <div className="flex flex-wrap gap-4 mb-5 items-end justify-between">
+        <div className="flex flex-wrap gap-4 items-end">
           <BattlefieldSelect
             battlefields={battlefields}
             value={bfLevel}
@@ -83,7 +82,7 @@ export default function RideTab({ data }) {
                 setSortKey(null);
                 setSortAsc(false);
               }}
-              className="text-xs text-slate-400 hover:text-amber-400 px-2 py-1 rounded border border-slate-600"
+              className="text-xs text-slate-400 hover:text-amber-400 px-3 py-1.5 rounded-lg border border-slate-600 hover:border-amber-500/50 transition-colors"
             >
               清除排序
             </button>
@@ -92,16 +91,18 @@ export default function RideTab({ data }) {
         <SearchInput onSearch={setSearch} />
       </div>
 
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto -mx-2 px-2">
         <table>
           <thead>
             <tr>
-              <th className="sticky left-0 bg-slate-900 z-10">坐骑</th>
+              <th className="sticky-left">坐骑</th>
               {RIDE_STAT_FIELDS.map(([key, label]) => (
                 <th
                   key={key}
                   onClick={() => handleSort(key)}
-                  className={`cursor-pointer select-none hover:text-amber-400 transition-colors ${sortKey === key ? "text-amber-400" : ""}`}
+                  className={`cursor-pointer select-none hover:text-amber-400 transition-colors ${
+                    sortKey === key ? "text-amber-400" : ""
+                  }`}
                 >
                   {label}
                   {sortKey === key && (
@@ -114,14 +115,14 @@ export default function RideTab({ data }) {
           <tbody>
             {filtered.map((ride) => (
               <tr key={ride.id}>
-                <td className="sticky left-0 bg-slate-900 z-10 text-amber-400 font-semibold whitespace-nowrap">
+                <td className="sticky-left text-amber-400 font-semibold whitespace-nowrap">
                   {ride.name}
                 </td>
                 {RIDE_STAT_FIELDS.map(([key]) => {
                   const coeff = ride.stats?.[bfLevel]?.[key];
                   const val = calcStat(coeff, key, star, baseRow[key] || 0);
                   return (
-                    <td key={key} className="text-sm">
+                    <td key={key} className="text-sm tabular-nums">
                       {val !== null ? val.toLocaleString() : "-"}
                     </td>
                   );

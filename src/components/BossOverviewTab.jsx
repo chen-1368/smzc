@@ -59,8 +59,8 @@ export default function BossOverviewTab({ data }) {
   }, [bosses, starIdx, sortKey, sortAsc]);
 
   return (
-    <div>
-      <div className="flex flex-wrap gap-4 mb-4 items-end">
+    <div className="animate-fade-in">
+      <div className="flex flex-wrap gap-4 mb-5 items-end">
         <BattlefieldSelect
           battlefields={battlefields}
           value={bfLevel}
@@ -85,23 +85,25 @@ export default function BossOverviewTab({ data }) {
               setSortKey(null);
               setSortAsc(false);
             }}
-            className="text-xs text-slate-400 hover:text-amber-400 px-2 py-1 rounded border border-slate-600"
+            className="text-xs text-slate-400 hover:text-amber-400 px-3 py-1.5 rounded-lg border border-slate-600 hover:border-amber-500/50 transition-colors"
           >
             清除排序
           </button>
         )}
       </div>
 
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto -mx-2 px-2">
         <table>
           <thead>
             <tr>
-              <th className="sticky left-0 bg-slate-900 z-10">魔王</th>
+              <th className="sticky-left">魔王</th>
               {BOSS_STAT_FIELDS.map(([key, label]) => (
                 <th
                   key={key}
                   onClick={() => handleSort(key)}
-                  className={`cursor-pointer select-none hover:text-amber-400 transition-colors ${sortKey === key ? "text-amber-400" : ""}`}
+                  className={`cursor-pointer select-none hover:text-amber-400 transition-colors ${
+                    sortKey === key ? "text-amber-400" : ""
+                  }`}
                 >
                   {label}
                   {sortKey === key && (
@@ -116,13 +118,13 @@ export default function BossOverviewTab({ data }) {
               const star = boss.stars[starIdx];
               return (
                 <tr key={boss.group}>
-                  <td className="sticky left-0 bg-slate-900 z-10 text-amber-400 font-semibold whitespace-nowrap">
+                  <td className="sticky-left text-amber-400 font-semibold whitespace-nowrap">
                     {boss.name}
                   </td>
                   {BOSS_STAT_FIELDS.map(([key]) => {
                     const val = computeStat(star, key);
                     return (
-                      <td key={key} className="text-sm">
+                      <td key={key} className="text-sm tabular-nums">
                         {val !== null ? val.toLocaleString() : "-"}
                       </td>
                     );

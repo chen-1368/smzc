@@ -10,8 +10,8 @@ export default function NeutralTab({ data }) {
   const baseRow = monsterAttrTable[bfLevel] || {};
 
   return (
-    <div>
-      <div className="flex flex-wrap gap-4 mb-4 items-end">
+    <div className="animate-fade-in">
+      <div className="flex flex-wrap gap-4 mb-5 items-end">
         <BattlefieldSelect
           battlefields={availableLevels}
           value={bfLevel}
@@ -19,11 +19,11 @@ export default function NeutralTab({ data }) {
         />
       </div>
 
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto -mx-2 px-2">
         <table>
           <thead>
             <tr>
-              <th className="sticky left-0 bg-slate-900 z-10">中立怪</th>
+              <th className="sticky-left">中立怪</th>
               {STAT_ORDER.map(([, label]) => (
                 <th key={label}>{label}</th>
               ))}
@@ -34,7 +34,7 @@ export default function NeutralTab({ data }) {
               const s = m.stats?.[bfLevel];
               return (
                 <tr key={i}>
-                  <td className="sticky left-0 bg-slate-900 z-10 text-amber-400 font-semibold whitespace-nowrap">
+                  <td className="sticky-left text-amber-400 font-semibold whitespace-nowrap">
                     {m.name}
                   </td>
                   {STAT_ORDER.map(([key]) => {
@@ -44,7 +44,7 @@ export default function NeutralTab({ data }) {
                         ? coeff
                         : Math.round(coeff * (baseRow[key] || 0));
                     return (
-                      <td key={key} className="text-sm">
+                      <td key={key} className="text-sm tabular-nums">
                         {val != null ? val.toLocaleString() : "-"}
                       </td>
                     );
