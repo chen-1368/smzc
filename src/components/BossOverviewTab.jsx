@@ -75,11 +75,6 @@ export default function BossOverviewTab({ data }) {
         )}
       </div>
 
-      <p className="text-xs text-slate-500 mb-3">
-        计算方式：基准值(godWarAttribute) × 等阶因子
-        {base && <span className="ml-2">基准 Lv.{bfLevel}: hp={base.hp?.toLocaleString()} atk={base.atk?.toLocaleString()}</span>}
-      </p>
-
       <div className="overflow-x-auto">
         <table>
           <thead>
