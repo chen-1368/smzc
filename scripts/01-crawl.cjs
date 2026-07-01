@@ -23,11 +23,9 @@ const NEEDED = [
   "godWarBossShow",
   "godWarCrystal",
   "godWarAttribute",
-  "godWarSubstitute",
   "monsterAttribute",
   "monster",
   "ride",
-  "role",
 ];
 
 function fetchText(url) {

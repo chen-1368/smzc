@@ -145,7 +145,7 @@ function main() {
         level: f.battlefieldLv,
       };
     })
-    .sort((a, b) => a.level - b.level);
+    .sort((a, b) => b.level - a.level);
 
   console.log(`  战场: ${battlefields.length} 个`);
 
@@ -199,6 +199,7 @@ function main() {
       const rideId = parseInt(rideIdStr);
       const rideInfo = rideById[rideId];
       if (!rideInfo) continue;
+
       // 去除重复的坐骑
       if (rides.some((r) => r.name === rideInfo.name)) continue;
 
@@ -221,7 +222,7 @@ function main() {
   rides.sort((a, b) => a.id - b.id);
   console.log(`  坐骑: ${rides.length} 个`);
 
-  // 4. 魔王数据
+  // 4. 魔王展示的阶数信息数据
   const bossShowById = {};
   for (const s of godWarBossShow) {
     bossShowById[s.id] = s;
@@ -280,7 +281,6 @@ function main() {
       stars,
     });
   }
-
   console.log(`  魔王: ${bosses.length} 个`);
 
   // 5. 中立怪数据
@@ -298,7 +298,6 @@ function main() {
     }
     neutralMonsters.push({ name, stats: statsByLevel });
   }
-
   console.log(`  中立怪: ${neutralMonsters.length} 个`);
 
   // 6. 水晶数据
@@ -321,7 +320,6 @@ function main() {
       break: c.break,
       protect: c.protect,
     }));
-
   console.log(`  水晶: ${crystals.length} 条`);
 
   // 7. 魔王属性基础表
