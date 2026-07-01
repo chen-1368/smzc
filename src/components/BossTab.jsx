@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 
 const STAT_FIELDS = [
   ['hp', '生命'], ['atk', '攻击'], ['def', '防御'], ['healHp', '回血'],
@@ -10,8 +10,9 @@ export default function BossTab({ data }) {
   const { bosses } = data
   const [bossGroup, setBossGroup] = useState(bosses[0]?.group)
 
-  const boss = bosses.find(b => b.group === bossGroup)
+  const boss = useMemo(() => bosses.find(b => b.group === bossGroup), [bosses, bossGroup])
   const stars = boss?.stars || []
+  const descHtml = useMemo(() => boss?.desc?.replace(/<br\s*\/?>/g, ' '), [boss?.desc])
 
   return (
     <div className="flex flex-col lg:flex-row gap-6">
@@ -33,8 +34,8 @@ export default function BossTab({ data }) {
       <div className="flex-1 min-w-0">
         <div className="mb-4">
           <h2 className="text-xl font-bold text-amber-400">{boss?.name}</h2>
-          {boss?.desc && (
-            <p className="text-sm text-slate-400 mt-2" dangerouslySetInnerHTML={{ __html: boss.desc.replace(/<br\s*\/?>/g, ' ') }} />
+          {descHtml && (
+            <p className="text-sm text-slate-400 mt-2" dangerouslySetInnerHTML={{ __html: descHtml }} />
           )}
         </div>
 

@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from "react";
+import { useState, useMemo } from "react";
 import { BattlefieldSelect } from "./Selectors";
 
 const BOSS_STAT_FIELDS = [
@@ -16,6 +16,9 @@ const BOSS_STAT_FIELDS = [
   ["protect", "减伤"],
   ["spd", "移速"],
 ];
+
+const TIER_CN = ["一", "二", "三", "四", "五", "六"];
+const TIER_OPTIONS = TIER_CN.map((cn, i) => ({ value: i, label: `${cn}阶` })).reverse();
 
 export default function BossOverviewTab({ data }) {
   const { bosses, battlefields, godWarAttrTable } = data;
@@ -35,16 +38,13 @@ export default function BossOverviewTab({ data }) {
     }
   };
 
-  const computeStat = useCallback(
-    (star, key) => {
-      if (!base || !star) return null;
-      if (key === "spd") return star.spd || 400;
-      if (key === "mp" || key === "healMp") return null;
-      const starMult = star[key] ?? 1;
-      return Math.round((base[key] || 0) * starMult);
-    },
-    [base],
-  );
+  const computeStat = (star, key) => {
+    if (!base || !star) return null;
+    if (key === "spd") return star.spd || 400;
+    if (key === "mp" || key === "healMp") return null;
+    const starMult = star[key] ?? 1;
+    return Math.round((base[key] || 0) * starMult);
+  };
 
   const sorted = useMemo(() => {
     if (!sortKey) return bosses;
@@ -54,11 +54,6 @@ export default function BossOverviewTab({ data }) {
       return sortAsc ? va - vb : vb - va;
     });
   }, [bosses, starIdx, sortKey, sortAsc]);
-
-  const starLabel = (idx) => {
-    const cn = ["一", "二", "三", "四", "五", "六"];
-    return `${cn[idx]}阶`;
-  };
 
   return (
     <div>
@@ -70,11 +65,11 @@ export default function BossOverviewTab({ data }) {
             value={starIdx}
             onChange={(e) => setStarIdx(Number(e.target.value))}
           >
-            {Array.from({ length: 6 }, (_, i) => (
-              <option key={i} value={i}>
-                {starLabel(i)}
+            {TIER_OPTIONS.map((opt) => (
+              <option key={opt.value} value={opt.value}>
+                {opt.label}
               </option>
-            )).reverse()}
+            ))}
           </select>
         </div>
         {sortKey && (

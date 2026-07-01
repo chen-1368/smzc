@@ -18,6 +18,26 @@ const RIDE_STAT_FIELDS = [
   ["spd", "移速"],
 ];
 
+function SearchInput({ onSearch }) {
+  const [value, setValue] = useState("");
+  return (
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        onSearch(value);
+      }}
+    >
+      <input
+        type="text"
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+        placeholder="坐骑名..."
+        className="px-3 py-1.5 rounded-lg text-sm bg-slate-800 border border-slate-600 text-slate-200 focus:outline-none focus:border-amber-500"
+      />
+    </form>
+  );
+}
+
 export default function RideTab({ data }) {
   const { rides, battlefields, monsterAttrTable } = data;
   const [bfLevel, setBfLevel] = useState(220);
@@ -35,7 +55,6 @@ export default function RideTab({ data }) {
   };
 
   const [search, setSearch] = useState("");
-  const [searchValue, setSearchValue] = useState("");
   const filtered = useMemo(() => {
     let list = search ? rides.filter((r) => r.name.includes(search)) : rides;
     if (!sortKey) return list;
@@ -45,6 +64,8 @@ export default function RideTab({ data }) {
       return sortAsc ? va - vb : vb - va;
     });
   }, [rides, bfLevel, sortKey, sortAsc, search]);
+
+  const baseRow = monsterAttrTable[bfLevel] || {};
 
   return (
     <div>
@@ -64,22 +85,7 @@ export default function RideTab({ data }) {
             </button>
           )}
         </div>
-        <div>
-          <form
-            onSubmit={(e) => {
-              e.preventDefault(); // 阻止表单默认刷新页面
-              setSearch(searchValue);
-            }}
-          >
-            <input
-              type="text"
-              value={searchValue}
-              onChange={(e) => setSearchValue(e.target.value)}
-              placeholder="坐骑名..."
-              className="px-3 py-1.5 rounded-lg text-sm bg-slate-800 border border-slate-600 text-slate-200 focus:outline-none focus:border-amber-500"
-            />
-          </form>
-        </div>
+        <SearchInput onSearch={setSearch} />
       </div>
 
       <div className="overflow-x-auto">
@@ -109,8 +115,7 @@ export default function RideTab({ data }) {
                 </td>
                 {RIDE_STAT_FIELDS.map(([key]) => {
                   const coeff = ride.stats?.[bfLevel]?.[key];
-                  const baseVal = monsterAttrTable[bfLevel]?.[key] || 0;
-                  const val = calcStat(coeff, key, star, baseVal);
+                  const val = calcStat(coeff, key, star, baseRow[key] || 0);
                   return (
                     <td key={key} className="text-sm">
                       {val !== null ? val : "-"}

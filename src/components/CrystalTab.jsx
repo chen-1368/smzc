@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { BattlefieldSelect } from "./Selectors";
 
 const CRYSTAL_FIELDS = [
@@ -12,10 +12,11 @@ export default function CrystalTab({ data }) {
   const { crystals, battlefields } = data;
   const [bfLevel, setBfLevel] = useState(220);
 
-  const crystal = crystals.find((c) => c.level === bfLevel);
-
-  // 按等级倒序
-  crystals.sort((a, b) => b.level - a.level);
+  const sortedCrystals = useMemo(
+    () => [...crystals].sort((a, b) => b.level - a.level),
+    [crystals],
+  );
+  const crystal = sortedCrystals.find((c) => c.level === bfLevel);
 
   return (
     <div className="max-w-4xl">
@@ -55,7 +56,7 @@ export default function CrystalTab({ data }) {
             </tr>
           </thead>
           <tbody>
-            {crystals.map((c) => (
+            {sortedCrystals.map((c) => (
               <tr
                 key={c.level}
                 className={c.level === bfLevel ? "bg-slate-800" : ""}

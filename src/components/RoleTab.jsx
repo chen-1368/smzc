@@ -27,6 +27,8 @@ export default function RoleTab({ data }) {
     })
   }, [roles, bfLevel, sortKey, sortAsc])
 
+  const baseRow = monsterAttrTable[bfLevel] || {}
+
   return (
     <div>
       <div className="flex flex-wrap gap-4 mb-4 items-end">
@@ -67,8 +69,7 @@ export default function RoleTab({ data }) {
                 </td>
                 {STAT_ORDER.map(([key]) => {
                   const coeff = role.stats?.[bfLevel]?.[key]
-                  const baseVal = monsterAttrTable[bfLevel]?.[key] || 0
-                  const val = calcStat(coeff, key, star, baseVal)
+                  const val = calcStat(coeff, key, star, baseRow[key] || 0)
                   return (
                     <td key={key} className="text-sm">
                       {val !== null ? val : '-'}
