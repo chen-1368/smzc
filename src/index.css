@@ -78,13 +78,13 @@ body {
 /* ===== 实体按钮 ===== */
 .entity-btn {
   background: var(--bg-tertiary);
-  border: 1px solid var(--border-color);
+  border: 1px solid transparent;
   color: var(--text-secondary);
-  transition: all 0.2s ease;
 }
 
 .entity-btn:hover {
   background: var(--bg-hover);
+  border: 1px solid var(--border-color);
   border-color: var(--border-light);
   color: var(--text-primary);
 }

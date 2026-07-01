@@ -31,26 +31,21 @@ export default function BossTab({ data }) {
   );
 
   return (
-    <div className="flex flex-col lg:flex-row gap-6 animate-fade-in">
-      <div className="lg:w-56 shrink-0">
-        <h3 className="text-sm text-slate-400 mb-3 uppercase tracking-wider font-medium">
-          选择魔王
-        </h3>
-        <div className="flex flex-col gap-1.5">
-          {bosses.map((b) => (
-            <button
-              key={b.group}
-              onClick={() => {
-                setBossGroup(b.group);
-              }}
-              className={`entity-btn px-4 py-2.5 rounded-lg text-sm text-left ${
-                bossGroup === b.group ? "active" : ""
-              }`}
-            >
-              {b.name}
-            </button>
-          ))}
-        </div>
+    <div className="animate-fade-in">
+      <div className="flex  gap-2 mb-5 items-end flex-wrap">
+        {bosses.map((b) => (
+          <button
+            key={b.group}
+            onClick={() => {
+              setBossGroup(b.group);
+            }}
+            className={`entity-btn px-4 py-2.5 rounded-lg text-sm text-left ${
+              bossGroup === b.group ? "active" : ""
+            }`}
+          >
+            {b.name}
+          </button>
+        ))}
       </div>
 
       <div className="flex-1 min-w-0">
