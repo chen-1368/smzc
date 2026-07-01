@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { STAT_ORDER } from './statUtils'
+import { BattlefieldSelect } from './Selectors'
 
 export default function NeutralTab({ data }) {
   const { neutralMonsters, battlefields, monsterAttrTable } = data
@@ -10,14 +11,7 @@ export default function NeutralTab({ data }) {
   return (
     <div>
       <div className="flex flex-wrap gap-4 mb-4 items-end">
-        <div>
-          <label className="block text-xs text-slate-400 mb-1">战场等阶</label>
-          <select value={bfLevel} onChange={e => setBfLevel(Number(e.target.value))}>
-            {[...availableLevels].reverse().map(b => (
-              <option key={b.level} value={b.level}>{b.name} (Lv.{b.level})</option>
-            ))}
-          </select>
-        </div>
+        <BattlefieldSelect battlefields={availableLevels} value={bfLevel} onChange={setBfLevel} />
       </div>
 
       <div className="overflow-x-auto">

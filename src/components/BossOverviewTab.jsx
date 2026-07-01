@@ -1,4 +1,5 @@
 import { useState, useMemo, useCallback } from "react";
+import { BattlefieldSelect } from "./Selectors";
 
 const BOSS_STAT_FIELDS = [
   ["hp", "生命"],
@@ -62,19 +63,7 @@ export default function BossOverviewTab({ data }) {
   return (
     <div>
       <div className="flex flex-wrap gap-4 mb-4 items-end">
-        <div>
-          <label className="block text-xs text-slate-400 mb-1">战场等阶</label>
-          <select
-            value={bfLevel}
-            onChange={(e) => setBfLevel(Number(e.target.value))}
-          >
-            {[...battlefields].reverse().map((b) => (
-              <option key={b.level} value={b.level}>
-                {b.name} (Lv.{b.level})
-              </option>
-            ))}
-          </select>
-        </div>
+        <BattlefieldSelect battlefields={battlefields} value={bfLevel} onChange={setBfLevel} />
         <div>
           <label className="block text-xs text-slate-400 mb-1">等阶</label>
           <select

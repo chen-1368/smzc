@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react'
-import { STAT_ORDER, calcStat, getStarMult } from './statUtils'
+import { STAT_ORDER, calcStat } from './statUtils'
+import { BattlefieldSelect, StarSelect } from './Selectors'
 
 export default function RoleTab({ data }) {
   const { roles, battlefields, monsterAttrTable } = data
@@ -29,22 +30,8 @@ export default function RoleTab({ data }) {
   return (
     <div>
       <div className="flex flex-wrap gap-4 mb-4 items-end">
-        <div>
-          <label className="block text-xs text-slate-400 mb-1">战场等阶</label>
-          <select value={bfLevel} onChange={e => { setBfLevel(Number(e.target.value)) }}>
-            {[...battlefields].reverse().map(b => (
-              <option key={b.level} value={b.level}>{b.name} (Lv.{b.level})</option>
-            ))}
-          </select>
-        </div>
-        <div>
-          <label className="block text-xs text-slate-400 mb-1">星级</label>
-          <select value={star} onChange={e => setStar(Number(e.target.value))}>
-            {Array.from({ length: 9 }, (_, i) => (
-              <option key={i} value={i}>{i}星 (×{getStarMult(i).toFixed(2)})</option>
-            )).reverse()}
-          </select>
-        </div>
+        <BattlefieldSelect battlefields={battlefields} value={bfLevel} onChange={setBfLevel} />
+        <StarSelect value={star} onChange={setStar} />
         {sortKey && (
           <button
             onClick={() => { setSortKey(null); setSortAsc(false) }}
