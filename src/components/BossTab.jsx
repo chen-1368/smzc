@@ -9,10 +9,8 @@ const STAT_FIELDS = [
 export default function BossTab({ data }) {
   const { bosses } = data
   const [bossGroup, setBossGroup] = useState(bosses[0]?.group)
-  const [tier, setTier] = useState(6)
 
   const boss = bosses.find(b => b.group === bossGroup)
-  const tierInfo = boss?.tiers?.find(t => t.tier === tier)
   const stars = boss?.stars || []
 
   return (
@@ -23,7 +21,7 @@ export default function BossTab({ data }) {
           {bosses.map(b => (
             <button
               key={b.group}
-              onClick={() => { setBossGroup(b.group); setTier(1) }}
+              onClick={() => { setBossGroup(b.group) }}
               className={`entity-btn px-3 py-2 rounded-lg text-sm text-left ${bossGroup === b.group ? 'active' : ''}`}
             >
               {b.name}
@@ -33,22 +31,10 @@ export default function BossTab({ data }) {
       </div>
 
       <div className="flex-1 min-w-0">
-        <div className="flex flex-wrap gap-4 mb-6 items-end">
-          <div>
-            <label className="block text-xs text-slate-400 mb-1">等阶</label>
-            <select value={tier} onChange={e => setTier(Number(e.target.value))}>
-              {[...(boss?.tiers || [])].reverse().map(t => {
-                const cn = ['一', '二', '三', '四', '五', '六']
-                return <option key={t.tier} value={t.tier}>{cn[t.tier - 1]}阶</option>
-              })}
-            </select>
-          </div>
-        </div>
-
         <div className="mb-4">
           <h2 className="text-xl font-bold text-amber-400">{boss?.name}</h2>
-          {tierInfo?.desc && (
-            <p className="text-sm text-slate-400 mt-2" dangerouslySetInnerHTML={{ __html: tierInfo.desc.replace(/<br\s*\/?>/g, ' ') }} />
+          {boss?.desc && (
+            <p className="text-sm text-slate-400 mt-2" dangerouslySetInnerHTML={{ __html: boss.desc.replace(/<br\s*\/?>/g, ' ') }} />
           )}
         </div>
 

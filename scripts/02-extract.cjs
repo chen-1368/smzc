@@ -239,11 +239,7 @@ function main() {
   for (const [groupId, group] of Object.entries(bossGroups)) {
     group.entries.sort((a, b) => a.level - b.level);
 
-    const tiers = group.entries.map((b) => ({
-      tier: b.level,
-      hard: b.hard,
-      desc: b.desc,
-    }));
+    const desc = group.entries[0].desc;
 
     // 获取所有星级乘数
     const stars = [];
@@ -280,7 +276,7 @@ function main() {
     bosses.push({
       group: parseInt(groupId),
       name: group.name,
-      tiers,
+      desc,
       stars,
     });
   }
