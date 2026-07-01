@@ -71,7 +71,11 @@ export default function RideTab({ data }) {
     <div>
       <div className="flex mb-4 items-end justify-between">
         <div className="flex gap-4 items-end">
-          <BattlefieldSelect battlefields={battlefields} value={bfLevel} onChange={setBfLevel} />
+          <BattlefieldSelect
+            battlefields={battlefields}
+            value={bfLevel}
+            onChange={setBfLevel}
+          />
           <StarSelect value={star} onChange={setStar} />
           {sortKey && (
             <button
@@ -118,7 +122,7 @@ export default function RideTab({ data }) {
                   const val = calcStat(coeff, key, star, baseRow[key] || 0);
                   return (
                     <td key={key} className="text-sm">
-                      {val !== null ? val : "-"}
+                      {val !== null ? val.toLocaleString() : "-"}
                     </td>
                   );
                 })}

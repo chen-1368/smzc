@@ -45,7 +45,7 @@ export default function NeutralTab({ data }) {
                         : Math.round(coeff * (baseRow[key] || 0));
                     return (
                       <td key={key} className="text-sm">
-                        {val != null ? val : "-"}
+                        {val != null ? val.toLocaleString() : "-"}
                       </td>
                     );
                   })}

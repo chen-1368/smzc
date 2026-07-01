@@ -18,7 +18,10 @@ const BOSS_STAT_FIELDS = [
 ];
 
 const TIER_CN = ["一", "二", "三", "四", "五", "六"];
-const TIER_OPTIONS = TIER_CN.map((cn, i) => ({ value: i, label: `${cn}阶` })).reverse();
+const TIER_OPTIONS = TIER_CN.map((cn, i) => ({
+  value: i,
+  label: `${cn}阶`,
+})).reverse();
 
 export default function BossOverviewTab({ data }) {
   const { bosses, battlefields, godWarAttrTable } = data;
@@ -58,7 +61,11 @@ export default function BossOverviewTab({ data }) {
   return (
     <div>
       <div className="flex flex-wrap gap-4 mb-4 items-end">
-        <BattlefieldSelect battlefields={battlefields} value={bfLevel} onChange={setBfLevel} />
+        <BattlefieldSelect
+          battlefields={battlefields}
+          value={bfLevel}
+          onChange={setBfLevel}
+        />
         <div>
           <label className="block text-xs text-slate-400 mb-1">等阶</label>
           <select
@@ -116,7 +123,7 @@ export default function BossOverviewTab({ data }) {
                     const val = computeStat(star, key);
                     return (
                       <td key={key} className="text-sm">
-                        {val !== null ? val : "-"}
+                        {val !== null ? val.toLocaleString() : "-"}
                       </td>
                     );
                   })}
