@@ -24,7 +24,7 @@ export default function BossOverviewTab({ data }) {
     }
   }
 
-  const computeStat = useCallback((boss, star, key) => {
+  const computeStat = useCallback((star, key) => {
     if (!base || !star) return null
     if (key === 'spd') return star.spd || 400
     if (key === 'mp' || key === 'healMp') return null
@@ -35,13 +35,11 @@ export default function BossOverviewTab({ data }) {
   const sorted = useMemo(() => {
     if (!sortKey) return bosses
     return [...bosses].sort((a, b) => {
-      const sa = a.stars[starIdx]
-      const sb = b.stars[starIdx]
-      const va = computeStat(a, sa, sortKey) ?? -1
-      const vb = computeStat(b, sb, sortKey) ?? -1
+      const va = a.stars[starIdx]?.[sortKey] ?? -1
+      const vb = b.stars[starIdx]?.[sortKey] ?? -1
       return sortAsc ? va - vb : vb - va
     })
-  }, [bosses, starIdx, sortKey, sortAsc, computeStat])
+  }, [bosses, starIdx, sortKey, sortAsc])
 
   const starLabel = (idx) => {
     const cn = ['一', '二', '三', '四', '五', '六']
@@ -108,7 +106,7 @@ export default function BossOverviewTab({ data }) {
                     {boss.name}
                   </td>
                   {BOSS_STAT_FIELDS.map(([key]) => {
-                    const val = computeStat(boss, star, key)
+                    const val = computeStat(star, key)
                     return (
                       <td key={key} className="text-sm">
                         {val !== null ? val : '-'}
