@@ -31,18 +31,23 @@ export default function App() {
         </div>
       </header>
 
-      <nav className="flex gap-2 px-4 py-3 border-b border-slate-800 bg-slate-900/80 backdrop-blur-sm sticky top-0 z-20">
-        {TABS.map((t) => (
-          <button
-            key={t.key}
-            onClick={() => setTab(t.key)}
-            className={`w-32 px-4 py-2 rounded-lg text-sm transition-all duration-200 whitespace-nowrap ${
-              tab === t.key ? "tab-active" : "tab-inactive"
-            }`}
-          >
-            {t.label}
-          </button>
-        ))}
+      <nav className="px-4 border-b border-slate-800 bg-slate-900/80 backdrop-blur-sm sticky top-0 z-20">
+        <div className="flex items-center">
+          {TABS.map((t) => (
+            <button
+              key={t.key}
+              onClick={() => setTab(t.key)}
+              className={`nav-tab relative px-4 py-3 text-sm transition-all duration-200 whitespace-nowrap ${
+                tab === t.key ? "nav-tab-active" : ""
+              }`}
+            >
+              {t.label}
+              {tab === t.key && (
+                <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-8 h-0.5 bg-amber-400 rounded-t" />
+              )}
+            </button>
+          ))}
+        </div>
       </nav>
 
       <main className="flex-1 p-6">

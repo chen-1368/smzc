@@ -35,7 +35,23 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* ===== 标签页 ===== */
+/* ===== 导航Tab ===== */
+.nav-tab {
+  color: var(--text-secondary);
+  font-weight: 500;
+  position: relative;
+}
+
+.nav-tab:hover {
+  color: var(--text-primary);
+}
+
+.nav-tab-active {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+/* ===== 标签页（保留用于其他场景） ===== */
 .tab-active {
   background: rgb(100, 100, 255);
   color: white;
@@ -223,5 +239,15 @@ input[type="text"]::placeholder {
   th, td {
     padding: 8px 10px;
     font-size: 0.8rem;
+  }
+
+  /* 导航Tab在小屏幕下可横向滚动 */
+  nav > div {
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  nav > div::-webkit-scrollbar {
+    display: none;
   }
 }
