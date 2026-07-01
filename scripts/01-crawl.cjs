@@ -24,7 +24,6 @@ const NEEDED = [
   "godWarCrystal",
   "godWarAttribute",
   "godWarSubstitute",
-  "godWarRole",
   "monsterAttribute",
   "monster",
   "ride",

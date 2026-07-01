@@ -104,8 +104,7 @@ function extractStats(monsterRow, level, attrByLevel) {
   const stats = {};
   for (const f of MULTIPLIER_FIELDS) {
     if (monsterRow[f] !== undefined && monsterRow[f] !== null && base) {
-      const baseKey = f === "hp" ? "hp" : f;
-      const baseVal = base[baseKey] || 0;
+      const baseVal = base[f] || 0;
       stats[f] = Math.round(baseVal * monsterRow[f]);
     }
   }
@@ -126,7 +125,6 @@ function main() {
   const godWarCrystal = arrayToObjects(loadConfig("godWarCrystal.js"));
   const godWarAttribute = arrayToObjects(loadConfig("godWarAttribute.js"));
   const godWarSubstitute = arrayToObjects(loadConfig("godWarSubstitute.js"));
-  const godWarRoleData = arrayToObjects(loadConfig("godWarRole.js"));
   const monsterAttribute = arrayToObjects(loadConfig("monsterAttribute.js"));
   const monster = arrayToObjects(loadConfig("monster.js"));
   const ride = arrayToObjects(loadConfig("ride.js"));
@@ -151,11 +149,8 @@ function main() {
   }
 
   // 1. 战场列表
-  let tierCounter = 0;
   const battlefields = godWarFight
-    .filter((f) => !f.close)
     .map((f) => {
-      tierCounter++;
       let name = f.name;
       // Fix mislabeled 16阶 (config says 15阶 but battlefieldLv=220)
       if (f.battlefieldLv === 220 && name.includes("15阶")) {
@@ -164,7 +159,6 @@ function main() {
       return {
         id: f.id,
         name,
-        battlefield: f.battlefield,
         level: f.battlefieldLv,
       };
     })
@@ -190,7 +184,6 @@ function main() {
     const statsByLevel = {};
 
     for (const fight of godWarFight) {
-      if (fight.close) continue;
       const monsterId = fight.roleMonster?.[roleId];
       if (!monsterId) continue;
       const m = monsterById[monsterId];
@@ -205,7 +198,6 @@ function main() {
   // 杨戬（替补角色）
   const yangJianStats = {};
   for (const fight of godWarFight) {
-    if (fight.close) continue;
     const monsterId = fight.substituteMonster?.[8];
     if (!monsterId) continue;
     const m = monsterById[monsterId];
@@ -228,11 +220,11 @@ function main() {
       const rideId = parseInt(rideIdStr);
       const rideInfo = rideById[rideId];
       if (!rideInfo) continue;
+      // 去除重复的坐骑
       if (rides.some((r) => r.name === rideInfo.name)) continue;
 
       const statsByLevel = {};
       for (const fight of godWarFight) {
-        if (fight.close) continue;
         const monsterId = fight.rideMonster?.[rideId];
         if (!monsterId) continue;
         const m = monsterById[monsterId];
@@ -247,7 +239,6 @@ function main() {
       rides.push({
         id: rideId,
         name: rideInfo.name,
-        starLimit: rideInfo.starLimit || null,
         stats: statsByLevel,
       });
     }
@@ -259,40 +250,6 @@ function main() {
   const bossShowById = {};
   for (const s of godWarBossShow) {
     bossShowById[s.id] = s;
-  }
-
-  // Extract boss rate from godWarRole (format: [atkRate, hpRate])
-  const BOSS_NAMES = [
-    "刑天",
-    "夸父",
-    "后羿",
-    "牛魔王",
-    "季禺",
-    "山鬼",
-    "太子长琴",
-    "逄蒙",
-    "鲧",
-    "骄虫",
-    "精卫",
-    "蚩尤",
-  ];
-  const bossRateByName = {};
-  for (const r of godWarRoleData) {
-    if (!r.rate) continue;
-    for (const bn of BOSS_NAMES) {
-      if (
-        r.name &&
-        r.name.includes(bn) &&
-        !r.name.includes("召唤") &&
-        !r.name.includes("魔首") &&
-        !r.name.includes("魔王技")
-      ) {
-        if (!bossRateByName[bn]) {
-          bossRateByName[bn] = { atkRate: r.rate[0], hpRate: r.rate[1] };
-        }
-        break;
-      }
-    }
   }
 
   const bossGroups = {};
@@ -318,40 +275,36 @@ function main() {
     const seenStarIds = new Set();
     for (const b of group.entries) {
       if (!b.monsterId) continue;
-      for (const [mapId, showId] of Object.entries(b.monsterId)) {
+      for (const [_, showId] of Object.entries(b.monsterId)) {
         if (seenStarIds.has(showId)) continue;
         seenStarIds.add(showId);
         const show = bossShowById[showId];
         if (!show) continue;
-        // Get real spd from monster.js (godWarBossShow spd is always 400, which is wrong)
+        // 从 monster.js 获取真正的倍率 (godWarBossShow is only for display)
         const monsterEntry = monsterById[showId];
-        const realSpd = monsterEntry?.spd || show.spd;
         stars.push({
           id: showId,
-          remark: show.remark || "",
-          hp: show.hp,
-          atk: show.atk,
-          def: show.def,
-          healHp: show.healHp,
-          hitVal: show.hitVal,
-          dodge: show.dodge,
-          crit: show.crit,
-          tenacity: show.tenacity,
-          lucky: show.lucky,
-          guardian: show.guardian,
-          break: show.break,
-          protect: show.protect,
-          spd: realSpd,
+          remark: monsterEntry?.remark || show.remark,
+          hp: monsterEntry?.hp || show.hp,
+          atk: monsterEntry?.atk || show.atk,
+          def: monsterEntry?.def || show.def,
+          healHp: monsterEntry?.healHp || show.healHp,
+          hitVal: monsterEntry?.hitVal || show.hitVal,
+          dodge: monsterEntry?.dodge || show.dodge,
+          crit: monsterEntry?.crit || show.crit,
+          tenacity: monsterEntry?.tenacity || show.tenacity,
+          lucky: monsterEntry?.lucky || show.lucky,
+          guardian: monsterEntry?.guardian || show.guardian,
+          break: monsterEntry?.break || show.break,
+          protect: monsterEntry?.protect || show.protect,
+          spd: monsterEntry?.spd || show.spd,
         });
       }
     }
 
-    const rate = bossRateByName[group.name] || null;
-
     bosses.push({
       group: parseInt(groupId),
       name: group.name,
-      rate,
       tiers,
       stars,
     });
@@ -366,7 +319,6 @@ function main() {
   for (const [key, name] of Object.entries(neutralNames)) {
     const statsByLevel = {};
     for (const fight of godWarFight) {
-      if (fight.close) continue;
       const monsterId = fight.neutralityMonster?.[key];
       if (!monsterId) continue;
       const m = monsterById[monsterId];
@@ -384,7 +336,7 @@ function main() {
 
   // 6. 水晶数据
   const crystals = godWarCrystal
-    .filter((c) => c.hp > 0 || c.def > 0 || c.guardian > 0)
+    .filter((c) => c.level > 59 && c.level % 10 === 0)
     .map((c) => ({
       level: c.level,
       hp: c.hp,
@@ -405,9 +357,11 @@ function main() {
 
   console.log(`  水晶: ${crystals.length} 条`);
 
-  // 7. 属性基础表
+  // 7. 魔王属性基础表
   const godWarAttrTable = {};
   for (const a of godWarAttribute) {
+    if (a.level < 60) continue; // 只保留 60 级以上
+    if (a.level % 10 !== 0) continue; // 只保留 10 级倍率
     godWarAttrTable[a.level] = {
       hp: a.hpGod,
       atk: a.atkGod,
@@ -426,6 +380,8 @@ function main() {
 
   const monsterAttrTable = {};
   for (const a of monsterAttribute) {
+    if (a.lv < 60) continue; // 只保留 60 级以上
+    if (a.lv % 10 !== 0) continue; // 只保留 10 级倍率
     monsterAttrTable[a.lv] = {
       hp: a.hp,
       atk: a.atk,
