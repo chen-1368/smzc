@@ -1,8 +1,8 @@
 import { useState } from 'react'
-import { STAT_ORDER, fmtStat } from './statUtils'
+import { STAT_ORDER } from './statUtils'
 
 export default function NeutralTab({ data }) {
-  const { neutralMonsters, battlefields } = data
+  const { neutralMonsters, battlefields, monsterAttrTable } = data
   const [bfLevel, setBfLevel] = useState(220)
 
   const availableLevels = battlefields.filter(b => b.level >= 70)
@@ -31,16 +31,18 @@ export default function NeutralTab({ data }) {
           <tbody>
             {neutralMonsters.map((m, i) => {
               const s = m.stats?.[bfLevel]
+              const baseRow = monsterAttrTable[bfLevel] || {}
               return (
                 <tr key={i}>
                   <td className="sticky left-0 bg-slate-900 z-10 text-amber-400 font-semibold whitespace-nowrap">
                     {m.name}
                   </td>
                   {STAT_ORDER.map(([key]) => {
-                    const val = s?.[key]
+                    const coeff = s?.[key]
+                    let val = key === 'spd' ? coeff : Math.round(coeff * (baseRow[key] || 0))
                     return (
                       <td key={key} className="text-sm">
-                        {val != null ? fmtStat(val) : '-'}
+                        {val != null ? val : '-'}
                       </td>
                     )
                   })}

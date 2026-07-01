@@ -1,8 +1,15 @@
 import { useState, useMemo } from 'react'
-import { STAT_ORDER, calcStat, fmtStat, getStarMult } from './statUtils'
+import { calcStat, getStarMult } from './statUtils'
+
+const RIDE_STAT_FIELDS = [
+  ['hp', '生命'], ['atk', '攻击'], ['def', '防御'], ['healHp', '回血'],
+  ['hitVal', '命中'], ['dodge', '闪避'], ['crit', '暴击'], ['tenacity', '韧性'],
+  ['lucky', '幸运'], ['guardian', '守护'], ['break', '穿透'], ['protect', '减伤'], ['spd', '移速'],
+]
+
 
 export default function RideTab({ data }) {
-  const { rides, battlefields } = data
+  const { rides, battlefields, monsterAttrTable } = data
   const [bfLevel, setBfLevel] = useState(220)
   const [star, setStar] = useState(8)
   const [sortKey, setSortKey] = useState(null)
@@ -22,11 +29,12 @@ export default function RideTab({ data }) {
     let list = search ? rides.filter(r => r.name.includes(search)) : rides
     if (!sortKey) return list
     return [...list].sort((a, b) => {
-      const va = calcStat(a.stats?.[bfLevel]?.[sortKey], sortKey, 0) ?? -1
-      const vb = calcStat(b.stats?.[bfLevel]?.[sortKey], sortKey, 0) ?? -1
+      const baseVal = monsterAttrTable[bfLevel]?.[sortKey] || 0
+      const va = a.stats?.[bfLevel]?.[sortKey] ?? -1
+      const vb = b.stats?.[bfLevel]?.[sortKey] ?? -1
       return sortAsc ? va - vb : vb - va
     })
-  }, [rides, bfLevel, sortKey, sortAsc, search])
+  }, [rides, bfLevel, sortKey, sortAsc, search, monsterAttrTable])
 
   return (
     <div>
@@ -72,7 +80,7 @@ export default function RideTab({ data }) {
           <thead>
             <tr>
               <th className="sticky left-0 bg-slate-900 z-10">坐骑</th>
-              {STAT_ORDER.map(([key, label]) => (
+              {RIDE_STAT_FIELDS.map(([key, label]) => (
                 <th
                   key={key}
                   onClick={() => handleSort(key)}
@@ -90,13 +98,13 @@ export default function RideTab({ data }) {
                 <td className="sticky left-0 bg-slate-900 z-10 text-amber-400 font-semibold whitespace-nowrap">
                   {ride.name}
                 </td>
-                {STAT_ORDER.map(([key]) => {
-                  const base = ride.stats?.[bfLevel]?.[key]
-                  const val = calcStat(base, key, star)
-                  const isBad = base !== undefined && base < 10 && key !== 'spd'
+                {RIDE_STAT_FIELDS.map(([key]) => {
+                  const coeff = ride.stats?.[bfLevel]?.[key]
+                  const baseVal = monsterAttrTable[bfLevel]?.[key] || 0
+                  const val = calcStat(coeff, key, star, baseVal)
                   return (
-                    <td key={key} className={`text-sm ${isBad ? 'text-red-400' : ''}`}>
-                      {val !== null ? fmtStat(val) : '-'}
+                    <td key={key} className="text-sm">
+                      {val !== null ? val : '-'}
                     </td>
                   )
                 })}

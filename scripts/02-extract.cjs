@@ -62,7 +62,7 @@ function arrayToObjects(arr) {
   return result;
 }
 
-const MULTIPLIER_FIELDS = [
+const STAT_FIELDS = [
   "hp",
   "atk",
   "def",
@@ -77,9 +77,8 @@ const MULTIPLIER_FIELDS = [
   "guardian",
   "break",
   "protect",
+  "spd",
 ];
-const ABSOLUTE_FIELDS = ["spd"];
-const STAT_FIELDS = [...MULTIPLIER_FIELDS, ...ABSOLUTE_FIELDS];
 
 const STAT_LABELS = {
   hp: "生命",
@@ -99,19 +98,10 @@ const STAT_LABELS = {
   spd: "移速",
 };
 
-function extractStats(monsterRow, level, attrByLevel) {
-  const base = attrByLevel[level];
+function extractStats(monsterRow) {
   const stats = {};
-  for (const f of MULTIPLIER_FIELDS) {
-    if (monsterRow[f] !== undefined && monsterRow[f] !== null && base) {
-      const baseVal = base[f] || 0;
-      stats[f] = Math.round(baseVal * monsterRow[f]);
-    }
-  }
-  for (const f of ABSOLUTE_FIELDS) {
-    if (monsterRow[f] !== undefined && monsterRow[f] !== null) {
-      stats[f] = Math.round(monsterRow[f]);
-    }
+  for (const field of STAT_FIELDS) {
+    stats[field] = monsterRow[field] || 0;
   }
   return stats;
 }
@@ -140,12 +130,6 @@ function main() {
   const rideById = {};
   for (const r of ride) {
     rideById[r.id] = r;
-  }
-
-  // Build monsterAttribute lookup by level
-  const attrByLevel = {};
-  for (const a of monsterAttribute) {
-    attrByLevel[a.lv] = a;
   }
 
   // 1. 战场列表
@@ -189,7 +173,7 @@ function main() {
       const m = monsterById[monsterId];
       if (!m) continue;
       const level = fight.battlefieldLv;
-      statsByLevel[level] = extractStats(m, level, attrByLevel);
+      statsByLevel[level] = extractStats(m);
     }
 
     roles.push({ id: roleId, name: roleName, stats: statsByLevel });
@@ -202,11 +186,7 @@ function main() {
     if (!monsterId) continue;
     const m = monsterById[monsterId];
     if (!m) continue;
-    yangJianStats[fight.battlefieldLv] = extractStats(
-      m,
-      fight.battlefieldLv,
-      attrByLevel,
-    );
+    yangJianStats[fight.battlefieldLv] = extractStats(m);
   }
   roles.push({ id: 8, name: "杨戬", stats: yangJianStats });
 
@@ -229,11 +209,7 @@ function main() {
         if (!monsterId) continue;
         const m = monsterById[monsterId];
         if (!m) continue;
-        statsByLevel[fight.battlefieldLv] = extractStats(
-          m,
-          fight.battlefieldLv,
-          attrByLevel,
-        );
+        statsByLevel[fight.battlefieldLv] = extractStats(m);
       }
 
       rides.push({
@@ -323,11 +299,7 @@ function main() {
       if (!monsterId) continue;
       const m = monsterById[monsterId];
       if (!m) continue;
-      statsByLevel[fight.battlefieldLv] = extractStats(
-        m,
-        fight.battlefieldLv,
-        attrByLevel,
-      );
+      statsByLevel[fight.battlefieldLv] = extractStats(m);
     }
     neutralMonsters.push({ name, stats: statsByLevel });
   }

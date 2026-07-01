@@ -1,5 +1,4 @@
 import { useState, useMemo } from 'react'
-import { fmtStat } from './statUtils'
 
 const BOSS_STAT_FIELDS = [
   ['hp', '生命'], ['atk', '攻击'], ['def', '防御'], ['healHp', '回血'],
@@ -112,7 +111,7 @@ export default function BossOverviewTab({ data }) {
                     const val = computeStat(boss, star, key)
                     return (
                       <td key={key} className="text-sm">
-                        {val !== null ? fmtStat(val) : '-'}
+                        {val !== null ? val : '-'}
                       </td>
                     )
                   })}
