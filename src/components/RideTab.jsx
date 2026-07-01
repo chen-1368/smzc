@@ -1,77 +1,110 @@
-import { useState, useMemo } from 'react'
-import { calcStat, getStarMult } from './statUtils'
+import { useState, useMemo } from "react";
+import { calcStat, getStarMult } from "./statUtils";
 
 const RIDE_STAT_FIELDS = [
-  ['hp', '生命'], ['atk', '攻击'], ['def', '防御'], ['healHp', '回血'],
-  ['hitVal', '命中'], ['dodge', '闪避'], ['crit', '暴击'], ['tenacity', '韧性'],
-  ['lucky', '幸运'], ['guardian', '守护'], ['break', '穿透'], ['protect', '减伤'], ['spd', '移速'],
-]
-
+  ["hp", "生命"],
+  ["atk", "攻击"],
+  ["def", "防御"],
+  ["healHp", "回血"],
+  ["hitVal", "命中"],
+  ["dodge", "闪避"],
+  ["crit", "暴击"],
+  ["tenacity", "韧性"],
+  ["lucky", "幸运"],
+  ["guardian", "守护"],
+  ["break", "穿透"],
+  ["protect", "减伤"],
+  ["spd", "移速"],
+];
 
 export default function RideTab({ data }) {
-  const { rides, battlefields, monsterAttrTable } = data
-  const [bfLevel, setBfLevel] = useState(220)
-  const [star, setStar] = useState(8)
-  const [sortKey, setSortKey] = useState(null)
-  const [sortAsc, setSortAsc] = useState(false)
-  const [search, setSearch] = useState('')
+  const { rides, battlefields, monsterAttrTable } = data;
+  const [bfLevel, setBfLevel] = useState(220);
+  const [star, setStar] = useState(8);
+  const [sortKey, setSortKey] = useState(null);
+  const [sortAsc, setSortAsc] = useState(false);
 
   const handleSort = (key) => {
     if (sortKey === key) {
-      setSortAsc(!sortAsc)
+      setSortAsc(!sortAsc);
     } else {
-      setSortKey(key)
-      setSortAsc(false)
+      setSortKey(key);
+      setSortAsc(false);
     }
-  }
+  };
 
+  const [search, setSearch] = useState("");
+  const [searchValue, setSearchValue] = useState("");
   const filtered = useMemo(() => {
-    let list = search ? rides.filter(r => r.name.includes(search)) : rides
-    if (!sortKey) return list
+    let list = search ? rides.filter((r) => r.name.includes(search)) : rides;
+    if (!sortKey) return list;
     return [...list].sort((a, b) => {
-      const va = a.stats?.[bfLevel]?.[sortKey] ?? -1
-      const vb = b.stats?.[bfLevel]?.[sortKey] ?? -1
-      return sortAsc ? va - vb : vb - va
-    })
-  }, [rides, bfLevel, sortKey, sortAsc, search])
+      const va = a.stats?.[bfLevel]?.[sortKey] ?? -1;
+      const vb = b.stats?.[bfLevel]?.[sortKey] ?? -1;
+      return sortAsc ? va - vb : vb - va;
+    });
+  }, [rides, bfLevel, sortKey, sortAsc, search]);
 
   return (
     <div>
-      <div className="flex flex-wrap gap-4 mb-4 items-end">
-        <div>
-          <label className="block text-xs text-slate-400 mb-1">战场等阶</label>
-          <select value={bfLevel} onChange={e => setBfLevel(Number(e.target.value))}>
-            {[...battlefields].reverse().map(b => (
-              <option key={b.level} value={b.level}>{b.name} (Lv.{b.level})</option>
-            ))}
-          </select>
+      <div className="flex mb-4 items-end justify-between">
+        <div className="flex gap-4 items-end">
+          <div>
+            <label className="block text-xs text-slate-400 mb-1">
+              战场等阶
+            </label>
+            <select
+              value={bfLevel}
+              onChange={(e) => setBfLevel(Number(e.target.value))}
+            >
+              {[...battlefields].reverse().map((b) => (
+                <option key={b.level} value={b.level}>
+                  {b.name} (Lv.{b.level})
+                </option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label className="block text-xs text-slate-400 mb-1">星级</label>
+            <select
+              value={star}
+              onChange={(e) => setStar(Number(e.target.value))}
+            >
+              {Array.from({ length: 9 }, (_, i) => (
+                <option key={i} value={i}>
+                  {i}星 (×{getStarMult(i).toFixed(2)})
+                </option>
+              )).reverse()}
+            </select>
+          </div>
+          {sortKey && (
+            <button
+              onClick={() => {
+                setSortKey(null);
+                setSortAsc(false);
+              }}
+              className="text-xs text-slate-400 hover:text-amber-400 px-2 py-1 rounded border border-slate-600"
+            >
+              清除排序
+            </button>
+          )}
         </div>
         <div>
-          <label className="block text-xs text-slate-400 mb-1">星级</label>
-          <select value={star} onChange={e => setStar(Number(e.target.value))}>
-            {Array.from({ length: 9 }, (_, i) => (
-              <option key={i} value={i}>{i}星 (×{getStarMult(i).toFixed(2)})</option>
-            )).reverse()}
-          </select>
-        </div>
-        <div>
-          <label className="block text-xs text-slate-400 mb-1">搜索</label>
-          <input
-            type="text"
-            value={search}
-            onChange={e => setSearch(e.target.value)}
-            placeholder="坐骑名..."
-            className="px-3 py-1.5 rounded-lg text-sm bg-slate-800 border border-slate-600 text-slate-200 focus:outline-none focus:border-amber-500"
-          />
-        </div>
-        {sortKey && (
-          <button
-            onClick={() => { setSortKey(null); setSortAsc(false) }}
-            className="text-xs text-slate-400 hover:text-amber-400 px-2 py-1 rounded border border-slate-600"
+          <form
+            onSubmit={(e) => {
+              e.preventDefault(); // 阻止表单默认刷新页面
+              setSearch(searchValue);
+            }}
           >
-            清除排序
-          </button>
-        )}
+            <input
+              type="text"
+              value={searchValue}
+              onChange={(e) => setSearchValue(e.target.value)}
+              placeholder="坐骑名..."
+              className="px-3 py-1.5 rounded-lg text-sm bg-slate-800 border border-slate-600 text-slate-200 focus:outline-none focus:border-amber-500"
+            />
+          </form>
+        </div>
       </div>
 
       <div className="overflow-x-auto">
@@ -83,29 +116,31 @@ export default function RideTab({ data }) {
                 <th
                   key={key}
                   onClick={() => handleSort(key)}
-                  className={`cursor-pointer select-none hover:text-amber-400 transition-colors ${sortKey === key ? 'text-amber-400' : ''}`}
+                  className={`cursor-pointer select-none hover:text-amber-400 transition-colors ${sortKey === key ? "text-amber-400" : ""}`}
                 >
                   {label}
-                  {sortKey === key && <span className="ml-1">{sortAsc ? '↑' : '↓'}</span>}
+                  {sortKey === key && (
+                    <span className="ml-1">{sortAsc ? "↑" : "↓"}</span>
+                  )}
                 </th>
               ))}
             </tr>
           </thead>
           <tbody>
-            {filtered.map(ride => (
+            {filtered.map((ride) => (
               <tr key={ride.id}>
                 <td className="sticky left-0 bg-slate-900 z-10 text-amber-400 font-semibold whitespace-nowrap">
                   {ride.name}
                 </td>
                 {RIDE_STAT_FIELDS.map(([key]) => {
-                  const coeff = ride.stats?.[bfLevel]?.[key]
-                  const baseVal = monsterAttrTable[bfLevel]?.[key] || 0
-                  const val = calcStat(coeff, key, star, baseVal)
+                  const coeff = ride.stats?.[bfLevel]?.[key];
+                  const baseVal = monsterAttrTable[bfLevel]?.[key] || 0;
+                  const val = calcStat(coeff, key, star, baseVal);
                   return (
                     <td key={key} className="text-sm">
-                      {val !== null ? val : '-'}
+                      {val !== null ? val : "-"}
                     </td>
-                  )
+                  );
                 })}
               </tr>
             ))}
@@ -113,5 +148,5 @@ export default function RideTab({ data }) {
         </table>
       </div>
     </div>
-  )
+  );
 }
