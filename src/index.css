@@ -42,7 +42,7 @@ body {
   position: relative;
 }
 
-.nav-tab:hover {
+.nav-tab-inactive:hover {
   color: var(--text-primary);
 }
 
@@ -230,6 +230,21 @@ input[type="text"]::placeholder {
 }
 
 /* ===== 响应式 ===== */
+@media (max-width: 768px) {
+  header > div {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  header h1 {
+    font-size: 1.125rem;
+  }
+
+  nav::-webkit-scrollbar {
+    display: none;
+  }
+}
+
 @media (max-width: 640px) {
   .overflow-x-auto {
     margin: 0 -16px;
@@ -239,15 +254,5 @@ input[type="text"]::placeholder {
   th, td {
     padding: 8px 10px;
     font-size: 0.8rem;
-  }
-
-  /* 导航Tab在小屏幕下可横向滚动 */
-  nav > div {
-    overflow-x: auto;
-    scrollbar-width: none;
-  }
-
-  nav > div::-webkit-scrollbar {
-    display: none;
   }
 }
