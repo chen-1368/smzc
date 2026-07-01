@@ -8,9 +8,10 @@ export default function CrystalTab({ data }) {
   const { crystals, battlefields } = data
   const [bfLevel, setBfLevel] = useState(220)
 
-  const crystal = crystals.find(c => c.level === bfLevel) || crystals.find(c => c.level <= bfLevel && c.hp > 0)
+  const crystal = crystals.find(c => c.level === bfLevel)
 
-  const milestoneCrystals = crystals.filter(c => c.hp > 0 && c.level % 10 === 0)
+  // 按等级倒序
+  crystals.sort((a, b) => b.level - a.level)
 
   return (
     <div className="max-w-4xl">
@@ -53,7 +54,7 @@ export default function CrystalTab({ data }) {
             </tr>
           </thead>
           <tbody>
-            {milestoneCrystals.map(c => (
+            {crystals.map(c => (
               <tr key={c.level} className={c.level === bfLevel ? 'bg-slate-800' : ''}>
                 <td className="text-amber-400 font-semibold">Lv.{c.level}</td>
                 {CRYSTAL_FIELDS.map(([key]) => (
