@@ -1,7 +1,7 @@
 import { useState, useMemo } from "react";
 import { STAT_ORDER, calcStat } from "./statUtils";
 import { BattlefieldSelect, StarSelect } from "./Selectors";
-import { StatBadge4 } from "./StatBadge4";
+import { StatBadge4 } from "./StatBadge";
 
 export default function RoleTab({ data }) {
   const { roles, battlefields, monsterAttrTable } = data;
