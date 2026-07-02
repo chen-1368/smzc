@@ -177,6 +177,19 @@ th.sticky-left {
   z-index: 10;
 }
 
+th.sticky-left-top {
+  position: sticky;
+  left: 0;
+  top: 0;
+  z-index: 11;
+}
+
+th.sticky-top {
+  position: sticky;
+  top: 0;
+  z-index: 10; 
+}
+
 /* ===== 滚动条 ===== */
 ::-webkit-scrollbar {
   width: 8px;

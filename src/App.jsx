@@ -21,7 +21,7 @@ export default function App() {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <header className="border-b border-slate-700/50 px-6 py-4 bg-gradient-to-r from-slate-900 to-slate-800 sticky top-0 z-20">
+      <header className="border-b border-slate-700/50 px-10 py-5 bg-gradient-to-r from-slate-900 to-slate-800 sticky top-0 z-20">
         <div className="flex items-center justify-between">
           <h1 className="text-xl font-bold text-amber-400 tracking-wide whitespace-nowrap">
             神魔战场数值查询
@@ -54,10 +54,6 @@ export default function App() {
         {tab === "neutral" && <NeutralTab data={data} />}
         {tab === "crystal" && <CrystalTab data={data} />}
       </main>
-
-      <footer className="border-t border-slate-800 px-6 py-4 text-center text-xs text-slate-500">
-        数据来源于游戏客户端配置 · 仅供参考
-      </footer>
     </div>
   );
 }

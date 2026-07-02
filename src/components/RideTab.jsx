@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useRef } from "react";
 import { calcStat } from "./statUtils";
 import { BattlefieldSelect, StarSelect } from "./Selectors";
 
@@ -51,12 +51,17 @@ export default function RideTab({ data }) {
   const [sortKey, setSortKey] = useState(null);
   const [sortAsc, setSortAsc] = useState(false);
 
+  const scrollRef = useRef(null);
+
   const handleSort = (key) => {
     if (sortKey === key) {
       setSortAsc(!sortAsc);
     } else {
       setSortKey(key);
       setSortAsc(false);
+    }
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = 0;
     }
   };
 
@@ -87,16 +92,16 @@ export default function RideTab({ data }) {
         <SearchInput onSearch={setSearch} />
       </div>
 
-      <div className="overflow-x-auto">
+      <div ref={scrollRef} className="overflow-auto h-[calc(100vh-15rem)]">
         <table>
           <thead>
             <tr>
-              <th className="sticky-left">坐骑</th>
+              <th className="sticky-left-top">坐骑</th>
               {RIDE_STAT_FIELDS.map(([key, label]) => (
                 <th
                   key={key}
                   onClick={() => handleSort(key)}
-                  className={`cursor-pointer select-none hover:text-amber-400 transition-colors ${
+                  className={`sticky-top cursor-pointer select-none hover:text-amber-400 transition-colors ${
                     sortKey === key ? "text-amber-400" : ""
                   }`}
                 >
