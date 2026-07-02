@@ -1,5 +1,6 @@
 import { useState, useMemo } from "react";
 import { BattlefieldSelect } from "./Selectors";
+import { StatBadge } from "./StatBadge";
 
 const BOSS_STAT_FIELDS = [
   ["hp", "生命"],
@@ -29,6 +30,44 @@ export default function BossOverviewTab({ data }) {
   const [starIdx, setStarIdx] = useState(5);
   const [sortKey, setSortKey] = useState(null);
   const [sortAsc, setSortAsc] = useState(false);
+
+  // ========== 计算当前等级下，每个属性 coeff 的最大/最小值 ==========
+  const statExtremes = useMemo(() => {
+    const extremes = {};
+    if (!bosses?.length) return extremes;
+
+    BOSS_STAT_FIELDS.forEach(([key]) => {
+      let min = Infinity;
+      let max = -Infinity;
+      let hasValue = false;
+
+      bosses.forEach((boss) => {
+        const val = boss.stars[starIdx]?.[key];
+        if (val != null && !isNaN(val)) {
+          hasValue = true;
+          if (val < min) min = val;
+          if (val > max) max = val;
+        }
+      });
+
+      extremes[key] = hasValue ? { min, max } : null;
+    });
+
+    return extremes;
+  }, [bosses, starIdx]);
+  // 根据 coeff 计算方块点亮档位（1~4格）
+  const calcBadgeLevel = (coeff, key) => {
+    const extreme = statExtremes[key];
+    if (!extreme || coeff == null || isNaN(coeff)) return 0;
+    const { min, max } = extreme;
+
+    // 所有角色系数相同时，默认亮4格
+    if (min === max) return 4;
+
+    // 线性映射：最低值=1格，最高值=4格
+    const ratio = (coeff - min) / (max - min);
+    return Math.ceil(ratio * 4);
+  };
 
   const base = godWarAttrTable?.[bfLevel];
 
@@ -115,9 +154,17 @@ export default function BossOverviewTab({ data }) {
                   </td>
                   {BOSS_STAT_FIELDS.map(([key]) => {
                     const val = computeStat(star, key);
+                    const badgeLevel = calcBadgeLevel(star?.[key], key);
                     return (
                       <td key={key} className="text-sm tabular-nums">
-                        {val !== null ? val.toLocaleString() : "-"}
+                        {val !== null ? (
+                          <div className="flex items-center whitespace-nowrap">
+                            <StatBadge level={badgeLevel} statKey={key} />
+                            {val.toLocaleString()}
+                          </div>
+                        ) : (
+                          "-"
+                        )}
                       </td>
                     );
                   })}
