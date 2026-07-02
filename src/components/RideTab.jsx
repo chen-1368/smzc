@@ -22,24 +22,19 @@ function SearchInput({ onSearch }) {
   const [value, setValue] = useState("");
   return (
     <div>
-      <label className="block text-xs text-slate-400 mb-1 text-center">
-        搜索
-      </label>
-      <div>
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            onSearch(value);
-          }}
-        >
-          <input
-            type="text"
-            value={value}
-            onChange={(e) => setValue(e.target.value)}
-            placeholder="坐骑名..."
-          />
-        </form>
-      </div>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          onSearch(value);
+        }}
+      >
+        <input
+          type="text"
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+          placeholder="坐骑名..."
+        />
+      </form>
     </div>
   );
 }

@@ -22,8 +22,8 @@ export default function App() {
   return (
     <div className="min-h-screen flex flex-col">
       <header className="border-b border-slate-700/50 px-10 py-5 bg-gradient-to-r from-slate-900 to-slate-800 sticky top-0 z-20">
-        <div className="flex items-center justify-between">
-          <h1 className="text-xl font-bold text-amber-400 tracking-wide whitespace-nowrap">
+        <div className="flex justify-between items-center">
+          <h1 className="text-xl font-bold text-amber-400 whitespace-nowrap">
             神魔战场数值查询
           </h1>
 

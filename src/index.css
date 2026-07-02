@@ -28,7 +28,12 @@
 }
 
 body {
-  font-family: 'MicrosoftYaHei', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-family:
+    "MicrosoftYaHei",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
   background: var(--bg-primary);
   color: var(--text-primary);
   -webkit-font-smoothing: antialiased;
@@ -73,7 +78,9 @@ body {
   background: var(--bg-tertiary);
   border: 1px solid var(--border-color);
   border-radius: 12px;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 /* ===== 统计标签和数值 ===== */
@@ -118,10 +125,12 @@ body {
   border: 1px solid var(--border-light);
   color: var(--text-primary);
   border-radius: 8px;
-  padding: 6px 12px;
+  padding: 6px 9px;
   font-size: 0.875rem;
   cursor: pointer;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .custom-select:focus {
@@ -183,7 +192,7 @@ th.sticky-left-top {
 th.sticky-top {
   position: sticky;
   top: 0;
-  z-index: 10; 
+  z-index: 10;
 }
 
 /* ===== 滚动条 ===== */
@@ -215,7 +224,9 @@ input[type="text"] {
   border-radius: 8px;
   padding: 6px 12px;
   font-size: 0.875rem;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 input[type="text"]:focus {
@@ -230,8 +241,14 @@ input[type="text"]::placeholder {
 
 /* ===== 动画 ===== */
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .animate-fade-in {
@@ -244,23 +261,15 @@ input[type="text"]::placeholder {
     flex-direction: column;
     gap: 0.75rem;
   }
+}
 
+@media (max-width: 640px) {
   header h1 {
     font-size: 1.125rem;
   }
 
-  nav::-webkit-scrollbar {
-    display: none;
-  }
-}
-
-@media (max-width: 640px) {
-  .overflow-x-auto {
-    margin: 0 -16px;
-    padding: 0 16px;
-  }
-
-  th, td {
+  th,
+  td {
     padding: 8px 10px;
     font-size: 0.8rem;
   }
