@@ -31,27 +31,16 @@ export default function RoleTab({ data }) {
 
   return (
     <div className="animate-fade-in">
-      <div className="flex flex-wrap gap-4 mb-5 items-end">
+      <div className="flex flex-wrap gap-4 mb-5 items-end justify-center">
         <BattlefieldSelect
           battlefields={battlefields}
           value={bfLevel}
           onChange={setBfLevel}
         />
         <StarSelect value={star} onChange={setStar} />
-        {sortKey && (
-          <button
-            onClick={() => {
-              setSortKey(null);
-              setSortAsc(false);
-            }}
-            className="text-xs text-slate-400 hover:text-amber-400 px-3 py-1.5 rounded-lg border border-slate-600 hover:border-amber-500/50 transition-colors"
-          >
-            清除排序
-          </button>
-        )}
       </div>
 
-      <div className="overflow-x-auto -mx-2 px-2">
+      <div className="overflow-x-auto">
         <table>
           <thead>
             <tr>

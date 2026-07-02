@@ -11,7 +11,7 @@ export default function NeutralTab({ data }) {
 
   return (
     <div className="animate-fade-in">
-      <div className="flex flex-wrap gap-4 mb-5 items-end">
+      <div className="flex flex-wrap mb-5 items-end justify-center">
         <BattlefieldSelect
           battlefields={availableLevels}
           value={bfLevel}
@@ -19,7 +19,7 @@ export default function NeutralTab({ data }) {
         />
       </div>
 
-      <div className="overflow-x-auto -mx-2 px-2">
+      <div className="overflow-x-auto">
         <table>
           <thead>
             <tr>

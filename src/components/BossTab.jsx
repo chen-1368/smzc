@@ -32,24 +32,23 @@ export default function BossTab({ data }) {
 
   return (
     <div className="animate-fade-in">
-      <div className="flex  gap-2 mb-5 items-end flex-wrap">
-        {bosses.map((b) => (
-          <button
-            key={b.group}
-            onClick={() => {
-              setBossGroup(b.group);
-            }}
-            className={`entity-btn px-4 py-2.5 rounded-lg text-sm text-left ${
-              bossGroup === b.group ? "active" : ""
-            }`}
-          >
-            {b.name}
-          </button>
-        ))}
-      </div>
-
-      <div className="flex-1 min-w-0">
-        <div className="mb-6">
+      <div className="flex flex-col gap-6 items-center">
+        <div className="flex gap-2 mb-5 items-end flex-wrap justify-center">
+          {bosses.map((b) => (
+            <button
+              key={b.group}
+              onClick={() => {
+                setBossGroup(b.group);
+              }}
+              className={`entity-btn px-4 py-2.5 rounded-lg text-sm text-left ${
+                bossGroup === b.group ? "active" : ""
+              }`}
+            >
+              {b.name}
+            </button>
+          ))}
+        </div>
+        <div className="flex flex-col gap-2 items-center">
           <h2 className="text-2xl font-bold text-amber-400">{boss?.name}</h2>
           {descHtml && (
             <p
@@ -60,7 +59,7 @@ export default function BossTab({ data }) {
         </div>
 
         {stars.length > 0 && (
-          <div className="overflow-x-auto -mx-2 px-2">
+          <div className="overflow-x-auto w-full">
             <table>
               <thead>
                 <tr>

@@ -8,7 +8,9 @@ const STAR_OPTIONS = Array.from({ length: 9 }, (_, i) => ({
 export function BattlefieldSelect({ battlefields, value, onChange }) {
   return (
     <div>
-      <label className="block text-xs text-slate-400 mb-1">战场等阶</label>
+      <label className="block text-xs text-slate-400 mb-1 text-center">
+        战场等阶
+      </label>
       <select value={value} onChange={(e) => onChange(Number(e.target.value))}>
         {battlefields.map((b) => (
           <option key={b.level} value={b.level}>
@@ -23,7 +25,9 @@ export function BattlefieldSelect({ battlefields, value, onChange }) {
 export function StarSelect({ value, onChange }) {
   return (
     <div>
-      <label className="block text-xs text-slate-400 mb-1">星级</label>
+      <label className="block text-xs text-slate-400 mb-1 text-center">
+        星级
+      </label>
       <select value={value} onChange={(e) => onChange(Number(e.target.value))}>
         {STAR_OPTIONS.map((opt) => (
           <option key={opt.value} value={opt.value}>

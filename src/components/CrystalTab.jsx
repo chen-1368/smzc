@@ -19,8 +19,8 @@ export default function CrystalTab({ data }) {
   const crystal = sortedCrystals.find((c) => c.level === bfLevel);
 
   return (
-    <div className="max-w-5xl animate-fade-in">
-      <div className="flex flex-wrap gap-4 mb-6 items-end">
+    <div className="max-w-5xl animate-fade-in mx-auto">
+      <div className="flex flex-wrap gap-4 mb-6 items-end justify-center">
         <BattlefieldSelect
           battlefields={battlefields}
           value={bfLevel}
@@ -28,7 +28,7 @@ export default function CrystalTab({ data }) {
         />
       </div>
 
-      <div className="mb-6">
+      <div className="flex mb-6 items-end gap-3">
         <h2 className="text-2xl font-bold text-amber-400">水晶属性</h2>
         <p className="text-sm text-slate-400 mt-1">Lv.{bfLevel}</p>
       </div>
