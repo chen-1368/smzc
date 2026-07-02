@@ -18,6 +18,7 @@ const TABS = [
 
 export default function App() {
   const [tab, setTab] = useState("role");
+  const [menuOpen, setMenuOpen] = useState(false);
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -27,7 +28,7 @@ export default function App() {
             神魔战场数值查询
           </h1>
 
-          <nav className="flex items-center">
+          <nav className="hidden md:flex items-center">
             {TABS.map((t) => (
               <button
                 key={t.key}
@@ -43,8 +44,62 @@ export default function App() {
               </button>
             ))}
           </nav>
+
+          <button
+            className="md:hidden flex flex-col justify-center items-center gap-1.5 p-2"
+            onClick={() => setMenuOpen(!menuOpen)}
+          >
+            <span
+              className={`block w-5 h-0.5 bg-slate-300 transition-all duration-200 ${menuOpen ? "rotate-45 translate-y-2" : ""}`}
+            />
+            <span
+              className={`block w-5 h-0.5 bg-slate-300 transition-all duration-200 ${menuOpen ? "opacity-0" : ""}`}
+            />
+            <span
+              className={`block w-5 h-0.5 bg-slate-300 transition-all duration-200 ${menuOpen ? "-rotate-45 -translate-y-2" : ""}`}
+            />
+          </button>
         </div>
       </header>
+
+      {/* 右侧抽屉菜单 */}
+      <div
+        className={`fixed inset-0 z-30 md:hidden transition-opacity duration-300 ${
+          menuOpen
+            ? "opacity-100 pointer-events-auto"
+            : "opacity-0 pointer-events-none"
+        }`}
+      >
+        {/* 左侧遮罩 */}
+        <div
+          className="absolute inset-0 bg-black/50"
+          onClick={() => setMenuOpen(false)}
+        />
+
+        {/* 右侧菜单面板 */}
+        <nav
+          className={`absolute top-0 right-0 h-full w-52 bg-slate-900 shadow-2xl border-l border-slate-700/50 flex flex-col pt-6 px-6 transition-transform duration-300 ease-in-out ${
+            menuOpen ? "translate-x-0" : "translate-x-full"
+          }`}
+        >
+          {TABS.map((t) => (
+            <button
+              key={t.key}
+              onClick={() => {
+                setTab(t.key);
+                setMenuOpen(false);
+              }}
+              className={`text-left py-3 text-sm border-b border-slate-700/30 ${
+                tab === t.key
+                  ? "text-amber-400 font-semibold"
+                  : "text-slate-400"
+              }`}
+            >
+              {t.label}
+            </button>
+          ))}
+        </nav>
+      </div>
 
       <main className="flex-1 p-6">
         {tab === "role" && <RoleTab data={data} />}
