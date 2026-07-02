@@ -1,6 +1,7 @@
 import { useState, useMemo, useRef } from "react";
 import { calcStat } from "./statUtils";
 import { BattlefieldSelect, StarSelect } from "./Selectors";
+import { StatBadge9 } from "./StatBadge";
 
 const RIDE_STAT_FIELDS = [
   ["hp", "生命"],
@@ -73,6 +74,38 @@ export default function RideTab({ data }) {
 
   const baseRow = monsterAttrTable[bfLevel] || {};
 
+  // ========== 计算当前等级下，每个属性 coeff 的最大/最小值 ==========
+  const statExtremes = useMemo(() => {
+    const extremes = {};
+    if (!rides?.length) return extremes;
+
+    RIDE_STAT_FIELDS.forEach(([key]) => {
+      let min = Infinity;
+      let max = -Infinity;
+      let hasValue = false;
+
+      rides.forEach((ride) => {
+        const val = ride.stats?.[bfLevel]?.[key];
+        if (val != null && !isNaN(val)) {
+          hasValue = true;
+          if (val < min) min = val;
+          if (val > max) max = val;
+        }
+      });
+
+      extremes[key] = hasValue ? { min, max } : null;
+    });
+
+    return extremes;
+  }, [rides, bfLevel]);
+  const calcBadgeLevel = (coeff, key) => {
+    const extreme = statExtremes[key];
+    if (!extreme || coeff == null || isNaN(coeff)) return 0;
+    const { min, max } = extreme;
+    if (min === max) return 4; // 数值全部相同时的默认档位
+    const ratio = (coeff - min) / (max - min);
+    return Math.ceil(ratio * 9);
+  };
   return (
     <div className="animate-fade-in">
       <div className="flex flex-wrap gap-4 mb-5 items-end justify-center">
@@ -117,9 +150,17 @@ export default function RideTab({ data }) {
                 {RIDE_STAT_FIELDS.map(([key]) => {
                   const coeff = ride.stats?.[bfLevel]?.[key];
                   const val = calcStat(coeff, key, star, baseRow[key] || 0);
+                  const badgeLevel = calcBadgeLevel(coeff, key);
                   return (
                     <td key={key} className="text-sm tabular-nums">
-                      {val !== null ? val.toLocaleString() : "-"}
+                      {val !== null ? (
+                        <div className="flex items-center whitespace-nowrap">
+                          <StatBadge9 level={badgeLevel} statKey={key} />
+                          {val.toLocaleString()}
+                        </div>
+                      ) : (
+                        "-"
+                      )}
                     </td>
                   );
                 })}

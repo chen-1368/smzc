@@ -17,7 +17,7 @@ const STAT_BADGE_COLORS = {
 };
 
 // ========== 四分格小图标组件 ==========
-export function StatBadge({ level = 0, statKey = "spd" }) {
+export function StatBadge4({ level = 0, statKey = "spd" }) {
   // 填充顺序：左上 → 左下 → 右上 → 右下（竖排填充，还原原图视觉）
   // 如果想要横排填充，改成 [0, 1, 2, 3] 即可
   const fillOrder = [0, 1, 2, 3];
@@ -31,6 +31,31 @@ export function StatBadge({ level = 0, statKey = "spd" }) {
 
   return (
     <span className="inline-grid grid-cols-2 grid-rows-2 w-[15px] h-[15px] gap-px align-middle mr-1.5">
+      {blocks.map((active, idx) => (
+        <span
+          key={idx}
+          className={
+            active ? STAT_BADGE_COLORS[statKey] || "bg-sky-500" : "bg-gray-400"
+          }
+        />
+      ))}
+    </span>
+  );
+}
+
+export function StatBadge9({ level = 0, statKey = "spd" }) {
+  // 填充顺序：左列→中列→右列，每列从上到下（和原四分格逻辑一致）
+  // 若想从下往上填充（类进度条视觉），改为 [6,3,0, 7,4,1, 8,5,2]
+  const fillOrder = [0, 1, 2, 3, 4, 5, 6, 7, 8];
+  const blocks = Array(9).fill(false);
+
+  const safeLevel = Math.min(Math.max(Math.round(level), 0), 9);
+  for (let i = 0; i < safeLevel; i++) {
+    blocks[fillOrder[i]] = true;
+  }
+
+  return (
+    <span className="inline-grid grid-cols-3 grid-rows-3 w-[17px] h-[17px] gap-px align-middle mr-1.5">
       {blocks.map((active, idx) => (
         <span
           key={idx}

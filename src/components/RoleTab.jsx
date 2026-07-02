@@ -1,7 +1,7 @@
 import { useState, useMemo } from "react";
 import { STAT_ORDER, calcStat } from "./statUtils";
 import { BattlefieldSelect, StarSelect } from "./Selectors";
-import { StatBadge } from "./StatBadge";
+import { StatBadge4 } from "./StatBadge4";
 
 export default function RoleTab({ data }) {
   const { roles, battlefields, monsterAttrTable } = data;
@@ -114,7 +114,7 @@ export default function RoleTab({ data }) {
                     <td key={key} className="text-sm tabular-nums">
                       {val !== null ? (
                         <div className="flex items-center whitespace-nowrap">
-                          <StatBadge level={badgeLevel} statKey={key} />
+                          <StatBadge4 level={badgeLevel} statKey={key} />
                           {val.toLocaleString()}
                         </div>
                       ) : (

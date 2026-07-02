@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 import { BattlefieldSelect } from "./Selectors";
-import { StatBadge } from "./StatBadge";
+import { StatBadge4 } from "./StatBadge";
 
 const BOSS_STAT_FIELDS = [
   ["hp", "生命"],
@@ -159,7 +159,7 @@ export default function BossOverviewTab({ data }) {
                       <td key={key} className="text-sm tabular-nums">
                         {val !== null ? (
                           <div className="flex items-center whitespace-nowrap">
-                            <StatBadge level={badgeLevel} statKey={key} />
+                            <StatBadge4 level={badgeLevel} statKey={key} />
                             {val.toLocaleString()}
                           </div>
                         ) : (
