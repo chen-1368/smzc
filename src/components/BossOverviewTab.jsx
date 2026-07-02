@@ -67,8 +67,11 @@ export default function BossOverviewTab({ data }) {
           onChange={setBfLevel}
         />
         <div>
-          <label className="block text-xs text-slate-400 mb-1">等阶</label>
+          <label className="block text-xs text-slate-400 mb-1 text-center">
+            等阶
+          </label>
           <select
+            className="custom-select"
             value={starIdx}
             onChange={(e) => setStarIdx(Number(e.target.value))}
           >

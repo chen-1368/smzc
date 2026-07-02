@@ -11,7 +11,7 @@ export function BattlefieldSelect({ battlefields, value, onChange }) {
       <label className="block text-xs text-slate-400 mb-1 text-center">
         战场等阶
       </label>
-      <select value={value} onChange={(e) => onChange(Number(e.target.value))}>
+      <select className="custom-select" value={value} onChange={(e) => onChange(Number(e.target.value))}>
         {battlefields.map((b) => (
           <option key={b.level} value={b.level}>
             {b.name} (Lv.{b.level})
@@ -28,7 +28,7 @@ export function StarSelect({ value, onChange }) {
       <label className="block text-xs text-slate-400 mb-1 text-center">
         星级
       </label>
-      <select value={value} onChange={(e) => onChange(Number(e.target.value))}>
+      <select className="custom-select" value={value} onChange={(e) => onChange(Number(e.target.value))}>
         {STAR_OPTIONS.map((opt) => (
           <option key={opt.value} value={opt.value}>
             {opt.label}
