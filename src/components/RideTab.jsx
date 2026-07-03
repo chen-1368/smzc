@@ -180,29 +180,38 @@ export default function RideTab({ data }) {
         <SearchInput onSearch={setSearch} />
       </div>
 
-      <div ref={scrollRef} className="overflow-auto max-h-[calc(100vh-22rem)]">
-        {/* 普通坐骑表 */}
-        <RideStatTable
-          list={normalRides}
-          scrollRef={scrollRef}
-          bfLevel={bfLevel}
-          star={star}
-          baseRow={baseRow}
-        />
-      </div>
-      {/* 珍琦坐骑表 */}
-      {rareRides.length > 0 && (
+      {filtered.length > 0 ? (
         <>
-          <div className="text-lg font-bold text-amber-400 mt-4 mb-3 sticky-top z-10">
-            珍琦
+          <div
+            ref={scrollRef}
+            className="overflow-auto max-h-[calc(100vh-22rem)]"
+          >
+            {/* 普通坐骑表 */}
+            <RideStatTable
+              list={normalRides}
+              scrollRef={scrollRef}
+              bfLevel={bfLevel}
+              star={star}
+              baseRow={baseRow}
+            />
           </div>
-          <RideStatTable
-            list={rareRides}
-            bfLevel={bfLevel}
-            star={star}
-            baseRow={baseRow}
-          />
+          {/* 珍琦坐骑表 */}
+          {rareRides.length > 0 && (
+            <div className="overflow-x-auto">
+              <div className="text-lg font-bold text-amber-400 mt-4 mb-3">
+                珍琦
+              </div>
+              <RideStatTable
+                list={rareRides}
+                bfLevel={bfLevel}
+                star={star}
+                baseRow={baseRow}
+              />
+            </div>
+          )}
         </>
+      ) : (
+        <div className="text-center text-gray-400 mt-10">没有数据</div>
       )}
     </div>
   );
