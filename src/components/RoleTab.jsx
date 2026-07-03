@@ -54,7 +54,7 @@ export default function RoleTab({ data }) {
 
     // 线性映射：最低值=1格，最高值=4格
     const ratio = (coeff - min) / (max - min);
-    return Math.ceil(ratio * 4);
+    return Math.round(ratio * 4);
   };
 
   const sortedRoles = useMemo(() => {

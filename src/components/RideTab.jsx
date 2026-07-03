@@ -87,7 +87,7 @@ function RideStatTable({ list, scrollRef, bfLevel, star, baseRow }) {
     if (!extreme || coeff == null || isNaN(coeff)) return 0;
     const { min, max } = extreme;
     if (min === max) return 9;
-    return Math.ceil(((coeff - min) / (max - min)) * 9);
+    return Math.round(((coeff - min) / (max - min)) * 9);
   };
 
   if (!list?.length) return null;
